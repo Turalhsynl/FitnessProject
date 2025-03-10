@@ -5,6 +5,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var conn = builder.Configuration.GetConnectionString("MyConn");
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
