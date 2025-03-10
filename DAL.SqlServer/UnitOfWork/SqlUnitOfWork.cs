@@ -12,7 +12,7 @@ public class SqlUnitOfWork(string connectionString, AppDbContext context) : IUni
 
     public SqlUserRepository _userRepository;
 
-    public IUserRepository userRepository => _userRepository ?? new SqlUserRepository(_context);
+    public IUserRepository UserRepository => _userRepository ?? new SqlUserRepository(_context);
 
     public async Task<int> SaveChangeAsync()
     {

@@ -28,7 +28,8 @@ public class ValidationPipelineBehaviour<TRequest, TResponse> : IPipelineBehavio
 
         if (failures.Any())
         {
-            throw new ValidationException(failures);        }
+            throw new ValidationException(failures);        
+        }
 
         return await next();
     }
