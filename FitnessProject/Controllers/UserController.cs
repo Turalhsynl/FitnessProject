@@ -16,4 +16,11 @@ public class UserController(ISender sender) : ControllerBase
     {
         return Ok(await _sender.Send(request));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetByIdAsync([FromQuery] Application.CQRS.Users.Handlers.GetById.Query request)
+    {
+        return Ok(await _sender.Send(request));
+    }
+
 }
