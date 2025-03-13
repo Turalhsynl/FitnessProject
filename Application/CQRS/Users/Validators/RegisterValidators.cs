@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.CQRS.Users.Validators;
 
-public class RegisterValidators : AbstractValidator<Register.Command>
+public class RegisterValidators : AbstractValidator<Register.RegisterCommand>
 {
     public RegisterValidators()
     {
@@ -17,7 +17,7 @@ public class RegisterValidators : AbstractValidator<Register.Command>
 
         RuleFor(u => u.Age)
             .NotEmpty()
-            .GreaterThan(18);
+            .GreaterThan(17);
 
         RuleFor(u => u.Gender)
             .NotEmpty()

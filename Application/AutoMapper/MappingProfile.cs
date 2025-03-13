@@ -9,9 +9,9 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Command, User>().ReverseMap();
+        CreateMap<RegisterCommand, User>().ReverseMap();
         CreateMap<User, RegisterDto>();
-
-        //CreateMap<User, UpdateDto>();
+        CreateMap<User, GetAllDto>();
+        CreateMap<User, UpdateDto>();
     }
 }

@@ -5,31 +5,32 @@ using Repository.Common;
 
 namespace Application.CQRS.Users.Handlers;
 
-public class GetById
+public class GetByEmail
 {
-    public class Query : IRequest<Result<GetByIdDto>>
+    public class EmailQuery : IRequest<Result<GetByEmailDto>>
     {
-        public int Id { get; set; }
+        public string Email { get; set; }
     }
 
-    public sealed class Handler : IRequestHandler<Query, Result<GetByIdDto>>
+    public sealed class Handler : IRequestHandler<EmailQuery, Result<GetByEmailDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
+
         public Handler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result<GetByIdDto>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<GetByEmailDto>> Handle(EmailQuery request, CancellationToken cancellationToken)
         {
-            var currentUser = await _unitOfWork.UserRepository.GetByIdAsync(request.Id);
+            var currentUser = await _unitOfWork.UserRepository.GetUserByEmailAsync(request.Email);
 
             if (currentUser == null)
             {
-                return new Result<GetByIdDto>() { Errors = ["User not found"], IsSuccess = false };
+                return new Result<GetByEmailDto>() { Errors = ["User not found"], IsSuccess = false };
             }
 
-            GetByIdDto response = new()
+            GetByEmailDto response = new()
             {
                 Id = currentUser.Id,
                 Firstname = currentUser.Firstname,
@@ -39,8 +40,7 @@ public class GetById
                 Email = currentUser.Email
             };
 
-            return new Result<GetByIdDto>() { Data = response, Errors = [], IsSuccess = true };
+            return new Result<GetByEmailDto>() { Data = response, Errors = [], IsSuccess = true };
         }
     }
 }
-

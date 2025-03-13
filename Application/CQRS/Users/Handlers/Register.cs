@@ -10,7 +10,7 @@ namespace Application.CQRS.Users.Handlers;
 
 public class Register
 {
-    public class Command : IRequest<Result<RegisterDto>>
+    public class RegisterCommand : IRequest<Result<RegisterDto>>
     {
         public string Firstname { get; set; }
         public string Lastname { get; set; }
@@ -20,12 +20,12 @@ public class Register
         public string Password { get; set; }
     }
 
-    public sealed class Handler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<Command, Result<RegisterDto>>
+    public sealed class Handler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<RegisterCommand, Result<RegisterDto>>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<Result<RegisterDto>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<RegisterDto>> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
 
             var currentUser = await _unitOfWork.UserRepository.GetUserByEmailAsync(request.Email);
