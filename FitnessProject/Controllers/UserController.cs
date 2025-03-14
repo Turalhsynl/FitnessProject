@@ -8,6 +8,7 @@ namespace FitnessProject.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class UserController(ISender sender) : ControllerBase
 {   
     private readonly ISender _sender = sender;
@@ -19,13 +20,13 @@ public class UserController(ISender sender) : ControllerBase
         return Ok(await _sender.Send(request));
     }
 
-    [HttpGet("ById")]
+    [HttpGet("GetById")]
     public async Task<IActionResult> GetByIdAsync([FromQuery] Application.CQRS.Users.Handlers.GetById.Query request)
     {
         return Ok(await _sender.Send(request));
     }
 
-    [HttpGet("ByEmail")]
+    [HttpGet("GetByEmail")]
     public async Task<IActionResult> GetByEmailAsync([FromQuery] Application.CQRS.Users.Handlers.GetByEmail.EmailQuery request)
     {
         return Ok(await _sender.Send(request));
@@ -37,14 +38,14 @@ public class UserController(ISender sender) : ControllerBase
         return Ok(await _sender.Send(request));
     }
 
-    [HttpDelete]
+    [HttpDelete("Delete")]
     public async Task<IActionResult> Delete([FromQuery] int id)
     {
         var request = new Application.CQRS.Users.Handlers.Delete.DeleteCommand { Id = id };
         return Ok(await _sender.Send(request));
     }
 
-    [HttpGet("getAll")]
+    [HttpGet("GetAll")]
     public async Task<IActionResult> GetAllUsers()
     {
         var result = await _sender.Send(new GetAll.GetAllUsersQuery());
@@ -55,5 +56,12 @@ public class UserController(ISender sender) : ControllerBase
         }
 
         return Ok(result.Data);
+    }
+
+    [HttpPost("Login")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Login([FromBody] Application.CQRS.Users.Handlers.Login.LoginRequest request)
+    {
+        return Ok(await _sender.Send(request));
     }
 }

@@ -11,8 +11,11 @@ public class SqlUnitOfWork(string connectionString, AppDbContext context) : IUni
     private readonly AppDbContext _context = context;
 
     public SqlUserRepository _userRepository;
+    public SqlRefreshTokenRepository _refreshTokenRepository;
 
     public IUserRepository UserRepository => _userRepository ?? new SqlUserRepository(_context);
+
+    public IRefreshTokenRepository RefreshTokenRepository => _refreshTokenRepository ?? new SqlRefreshTokenRepository(_context);
 
     public async Task<int> SaveChangeAsync()
     {
