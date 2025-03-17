@@ -9,5 +9,7 @@ public interface IUserRepository
     Task Remove(int id);
     IQueryable<User> GetAll();
     Task<User> GetByIdAsync(int id);
-    Task<User> GetUserByEmailAsync(string email);   
+    Task<User> GetUserByEmailAsync(string email);  
+    
+
 }
