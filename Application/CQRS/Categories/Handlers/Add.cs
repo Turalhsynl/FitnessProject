@@ -7,7 +7,6 @@ using MediatR;
 using Repository.Common;
 
 namespace Application.CQRS.Categories.Handlers;
-
 public class Add
 {
     public class AddCommand : IRequest<Result<AddDto>>
@@ -17,37 +16,7 @@ public class Add
         public string ImageUrl { get; set; }
     }
 
-    //public sealed class Handler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<AddCommand, Result<AddDto>>
-    //{
-    //    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    //    private readonly IMapper _mapper = mapper;
-    //    private readonly IUserContext _userContext;
-
-    //    public async Task<Result<AddDto>> Handle(AddCommand request, CancellationToken cancellationToken)
-    //    {
-    //        var newCategory = _mapper.Map<Category>(request);
-    //        newCategory.CreatedBy = _userContext.MustGetUserId();
-
-    //        if (string.IsNullOrEmpty(newCategory.Name))
-    //        {
-    //            throw new Exception("Category name is required");
-    //        }
-
-    //        await _unitOfWork.CategoryRepository.AddAsync(newCategory);
-
-    //        var response = _mapper.Map<AddDto>(newCategory);
-
-    //        return new Result<AddDto>
-    //        {
-    //            Data = response,
-    //            Errors = [],
-    //            IsSuccess = true
-    //        };
-    //    }
-    //}
-
-    public sealed class Handler(IUnitOfWork unitOfWork, IMapper mapper, IUserContext userContext)
-    : IRequestHandler<AddCommand, Result<AddDto>>
+    public sealed class Handler(IUnitOfWork unitOfWork, IMapper mapper, IUserContext userContext) : IRequestHandler<AddCommand, Result<AddDto>>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMapper _mapper = mapper;
@@ -61,7 +30,7 @@ public class Add
             }
 
             var newCategory = _mapper.Map<Category>(request);
-            newCategory.CreatedBy = _userContext.MustGetUserId(); // Burada xəta olmamalıdır
+            newCategory.CreatedBy = _userContext.MustGetUserId();
 
             if (string.IsNullOrEmpty(newCategory.Name))
             {
@@ -69,7 +38,7 @@ public class Add
             }
 
             await _unitOfWork.CategoryRepository.AddAsync(newCategory);
-            await _unitOfWork.SaveChangeAsync(); // Dəyişiklikləri yadda saxla
+            await _unitOfWork.SaveChangeAsync();
 
             var response = _mapper.Map<AddDto>(newCategory);
 
