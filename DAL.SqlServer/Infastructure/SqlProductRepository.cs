@@ -1,12 +1,99 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DAL.SqlServer.Context;
+using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Repository.Repositories;
 
-namespace DAL.SqlServer.Infastructure
+namespace DAL.SqlServer.Infastructure;
+
+public class SqlProductRepository(AppDbContext context) : IProductRepository
 {
-    internal class SqlProductRepository
+    private readonly AppDbContext _context = context;
+    public async Task AddAsync(Product product)
     {
+        await _context.Products.AddAsync(product);
+        await _context.SaveChangesAsync();
+    }
+     //Cart yazilanda olacaq
+    public async Task AddToCartAsync(int productId, int userId, int quantity)
+    {
+        //var cartItem = new CartItem
+        //{
+        //    ProductId = productId,
+        //    UserId = userId,
+        //    Quantity = quantity
+        //};
+        //await _context.CartItems.AddAsync(cartItem);
+        //await _context.SaveChangesAsync();
+        throw new NotImplementedException();
+    }
+
+    //Favorite yazilanda 
+    public async Task AddToFavoritesAsync(int productId, int userId)
+    {
+        //var existingFavorite = await _context.Favorites
+        //.FirstOrDefaultAsync(f => f.ProductId == productId && f.UserId == userId);
+
+        //if (existingFavorite == null)
+        //{
+        //    var favorite = new Favorite
+        //    {
+        //        ProductId = productId,
+        //        UserId = userId
+        //    };
+        //    await _context.Favorites.AddAsync(favorite);
+        //    await _context.SaveChangesAsync();
+        //}
+        throw new NotImplementedException();
+    }
+
+    public IQueryable<Product> GetAll()
+    {
+        return _context.Products;
+    }
+
+    public async Task<Product> GetByIdAsync(int id)
+    {
+        return await _context.Products
+            .FirstOrDefaultAsync(p => p.Id == id);
+    }
+
+    //Cart yazilanda olacaq
+    public async Task<IEnumerable<Product>> GetCartByUserAsync(int userId)
+    {
+        //var cartItems = await _context.CartItems
+        //   .Where(ci => ci.UserId == userId)
+        //   .Include(ci => ci.Product)
+        //   .ToListAsync();
+
+        //return cartItems.Select(ci => ci.Product);
+        throw new NotImplementedException();
+    }
+
+    //Favorit olacaq
+    public async Task<IEnumerable<Product>> GetFavoritesByUserAsync(int userId)
+    {
+        //var favorites = await _context.Favorites
+        //    .Where(f => f.UserId == userId)
+        //    .Include(f => f.Product)
+        //    .ToListAsync();
+
+        //return favorites.Select(f => f.Product);
+        throw new NotImplementedException();
+    }
+
+    public async Task RemoveAsync(int id)
+    {
+        var product = await _context.Products.FindAsync(id);
+        if (product != null)
+        {
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async void Update(Product product)
+    {
+        _context.Products.Update(product);
+        await _context.SaveChangesAsync();
     }
 }
