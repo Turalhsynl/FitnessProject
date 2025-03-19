@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.BaseEntities;
 
-namespace Domain.Entities
+namespace Domain.Entities;
+
+public class Cart : BaseEntity
 {
-    internal class Cart
-    {
-    }
+    public int UserId { get; set; }
+    public List<CartLine> CartLines { get; set; } = new List<CartLine>();
+    public decimal TotalPrice => CartLines.Sum(cl => cl.Price * cl.Quantity);
 }
