@@ -18,7 +18,6 @@ namespace FitnessProject.API.Controllers
             _sender = sender;
         }
 
-        // Endpoint to add a new product (register)
         [HttpPost("Add")]
         public async Task<IActionResult> AddAsync([FromBody] Application.CQRS.Products.Handlers.AddProduct.AddProductCommand request)
         {
