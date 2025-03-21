@@ -12,13 +12,9 @@ public class GetById
         public int Id { get; set; }
     }
 
-    public sealed class Handler : IRequestHandler<Query, Result<GetByIdDto>>
+    public sealed class Handler(IUnitOfWork unitOfWork) : IRequestHandler<Query, Result<GetByIdDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public Handler(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         public async Task<Result<GetByIdDto>> Handle(Query request, CancellationToken cancellationToken)
         {

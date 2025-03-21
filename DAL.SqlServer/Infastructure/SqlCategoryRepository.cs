@@ -15,7 +15,7 @@ public class SqlCategoryRepository(AppDbContext context) : ICategoryRepository
         await _context.SaveChangesAsync();
     }
 
-    public bool Delete(int id, int deletedBy)
+    public async Task<bool> Delete(int id, int deletedBy)
     {
         var category = _context.Categories.FirstOrDefault(c => c.Id == id);
         if (category == null) { return false; }

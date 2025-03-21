@@ -1,4 +1,5 @@
-﻿using Application.CQRS.Categories.ResponseDto;
+﻿using Application.CQRS.Categories.Handlers;
+using Application.CQRS.Categories.ResponseDto;
 using Application.CQRS.Users.ResponseDto;
 using AutoMapper;
 using Domain.Entities;
@@ -15,7 +16,9 @@ public class MappingProfile : Profile
         CreateMap<User, RegisterDto>();
         CreateMap<User, GetAllDto>();
         CreateMap<User, UpdateDto>();
-        CreateMap<Category, AddDto>();
         CreateMap<AddCommand, Category>();
+        CreateMap<Category, AddDto>();
+        CreateMap<Category, GetAllCategoryDto>();
+        CreateMap<Category, UpdateCategoryDto>();
     }
 }
