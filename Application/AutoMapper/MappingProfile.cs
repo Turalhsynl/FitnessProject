@@ -1,4 +1,7 @@
-﻿using Application.CQRS.Categories.Handlers;
+
+using Application.CQRS.Products.ResponseDto;
+using static Application.CQRS.Products.Handlers.AddProduct;
+using Application.CQRS.Categories.Handlers;
 using Application.CQRS.Categories.ResponseDto;
 using Application.CQRS.Users.ResponseDto;
 using AutoMapper;
@@ -16,6 +19,11 @@ public class MappingProfile : Profile
         CreateMap<User, RegisterDto>();
         CreateMap<User, GetAllDto>();
         CreateMap<User, UpdateDto>();
+        CreateMap<Product, GetAllProductDto>();
+        CreateMap<Product, GetProductByIdDto>();
+        CreateMap<Product, UpdateProductDto>();
+        CreateMap<Product, AddProductDto>();
+        CreateMap<AddProductCommand, Product>();
         CreateMap<AddCommand, Category>();
         CreateMap<Category, AddDto>();
         CreateMap<Category, GetAllCategoryDto>();
