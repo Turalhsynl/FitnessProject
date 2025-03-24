@@ -1,4 +1,4 @@
-﻿using DAL.SqlServer.Context;
+using DAL.SqlServer.Context;
 using DAL.SqlServer.Infastructure;
 using Repository.Common;
 using Repository.Repositories;
@@ -13,13 +13,12 @@ public class SqlUnitOfWork(string connectionString, AppDbContext context) : IUni
     public SqlProductRepository _productRepository;
     public SqlUserRepository _userRepository;
     public SqlRefreshTokenRepository _refreshTokenRepository;
-    
+    public SqlCategoryRepository _categoryRepository;
 
     public IUserRepository UserRepository => _userRepository ?? new SqlUserRepository(_context);
-
     public IRefreshTokenRepository RefreshTokenRepository => _refreshTokenRepository ?? new SqlRefreshTokenRepository(_context);
-
     public IProductRepository ProductRepository => _productRepository ?? new SqlProductRepository(_context);
+    public ICategoryRepository CategoryRepository => _categoryRepository ?? new SqlCategoryRepository(_context);
 
     public async Task<int> SaveChangeAsync()
     {
