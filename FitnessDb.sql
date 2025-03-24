@@ -81,3 +81,18 @@ CREATE TABLE [dbo].[FitnessPrograms] (
     [IsDeleted]          BIT             DEFAULT ((0)) NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+CREATE TABLE [dbo].[Categories] (
+    [Id]          INT            IDENTITY (1, 1) NOT NULL,
+    [Name]        NVARCHAR (50)  NOT NULL,
+    [Description] NVARCHAR (MAX) NULL,
+    [ImageUrl]    NVARCHAR (MAX) NULL,
+	[CreatedBy]   INT            NULL,
+    [UpdatedBy]   INT            NULL,
+    [DeletedBy]   INT            NULL,
+    [CreatedDate] DATETIME       DEFAULT (getdate()) NULL,
+    [UpdatedDate] DATETIME       NULL,
+    [DeletedDate] DATETIME       NULL,
+    [IsDeleted]   BIT            DEFAULT ((0)) NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);

@@ -12,10 +12,13 @@ public class SqlUnitOfWork(string connectionString, AppDbContext context) : IUni
 
     public SqlUserRepository _userRepository;
     public SqlRefreshTokenRepository _refreshTokenRepository;
+    public SqlCategoryRepository _categoryRepository;
 
     public IUserRepository UserRepository => _userRepository ?? new SqlUserRepository(_context);
 
     public IRefreshTokenRepository RefreshTokenRepository => _refreshTokenRepository ?? new SqlRefreshTokenRepository(_context);
+
+    public ICategoryRepository CategoryRepository => _categoryRepository ?? new SqlCategoryRepository(_context);
 
     public async Task<int> SaveChangeAsync()
     {
