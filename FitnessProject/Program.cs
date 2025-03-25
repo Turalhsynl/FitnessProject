@@ -1,4 +1,4 @@
-using Application;
+﻿using Application;
 using Application.Security;
 using DAL.SqlServer;
 using FitnessProject.API.Infrastructure;
@@ -7,7 +7,18 @@ using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(options => { options.AddPolicy("AllowAll", policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllWithCredentials",
+        policy =>
+        {
+            policy.SetIsOriginAllowed(_ => true) // Bütün domenlərə icazə ver
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials(); // Cookie və auth məlumatlarını ötürməyə icazə verir
+        });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -30,7 +41,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
+app.UseCors("AllowAllWithCredentials"); // "AllowAll" yox, yeni policy istifadə et
+
 app.UseAuthorization();
 
 
