@@ -19,7 +19,7 @@ public class AddProduct
         public decimal Price { get; set; }
         public string ImageUrl { get; set; }
         public ProductColors Color { get; set; }
-        //public int CategoryId { get; set; }
+        public int CategoryId { get; set; }
     }
 
     public sealed class Handler(IUnitOfWork unitOfWork, IMapper mapper, IUserContext userContext) : IRequestHandler<AddProductCommand, Result<AddProductDto>>

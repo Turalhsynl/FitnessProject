@@ -12,10 +12,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAllWithCredentials",
         policy =>
         {
-            policy.SetIsOriginAllowed(_ => true) // Bütün domenlərə icazə ver
+            policy.SetIsOriginAllowed(_ => true)
                   .AllowAnyHeader()
                   .AllowAnyMethod()
-                  .AllowCredentials(); // Cookie və auth məlumatlarını ötürməyə icazə verir
+                  .AllowCredentials();
         });
 });
 
@@ -41,7 +41,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowAllWithCredentials"); // "AllowAll" yox, yeni policy istifadə et
+app.UseCors("AllowAllWithCredentials");
 
 app.UseAuthorization();
 
