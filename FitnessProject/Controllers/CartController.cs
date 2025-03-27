@@ -1,48 +1,57 @@
-﻿using Application.CQRS.Carts.Handlers;
+﻿using Application.CQRS.Carts.ResponseDto;
+using Common.GlobalResponses.Generics;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FitnessProject.API.Controllers;
+namespace WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CartController : ControllerBase
+public class CartController(ISender sender) : ControllerBase
 {
-    private readonly IMediator _mediator;
+    private readonly ISender _sender = sender;
 
-    public CartController(IMediator mediator)
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateCart([FromBody] CreateCartCommand command)
     {
-        _mediator = mediator;
+        var result = await _sender.Send(command);
+        if (result.IsSuccess)
+        {
+            return Ok(result.Data);
+        }
+        return BadRequest(result.Errors);
     }
 
-    /// <summary>
-    /// Kullanıcının sepetini getirir.
-    /// </summary>
-    [HttpGet("{userId}")]
-    public async Task<IActionResult> GetCart(int userId)
+    [HttpPost("add-product")]
+    public async Task<IActionResult> AddProductToCart([FromBody] AddProductToCartCommand command)
     {
-        var result = await _mediator.Send(new GetCart.GetCartQuery { UserId = userId });
-        return Ok(result);
+        var result = await _sender.Send(command);
+        if (result.IsSuccess)
+        {
+            return Ok(result.Data);
+        }
+        return BadRequest(result.Errors);
     }
 
-    /// <summary>
-    /// Sepete ürün ekler.
-    /// </summary>
-    [HttpPost("add")]
-    public async Task<IActionResult> AddToCart([FromBody] AddToCart.AddToCartCommand command)
+    [HttpGet("{cartId}")]
+    public async Task<IActionResult> GetCart(int cartId)
     {
-        var result = await _mediator.Send(command);
-        return Ok(result);
+        var result = await _sender.Send(new GetCartQuery { CartId = cartId });
+        if (result.IsSuccess)
+        {
+            return Ok(result.Data);
+        }
+        return BadRequest(result.Errors);
     }
 
-    /// <summary>
-    /// Sepetten ürün çıkarır.
-    /// </summary>
-    [HttpPost("remove")]
-    public async Task<IActionResult> RemoveFromCart([FromBody] RemoveFromCart.RemoveFromCartCommand command)
+    [HttpDelete("remove-product/{cartId}/{productId}")]
+    public async Task<IActionResult> DeleteProductFromCart(int cartId, int productId)
     {
-        var result = await _mediator.Send(command);
-        return Ok(result);
+        var result = await _sender.Send(new DeleteProductFromCartCommand { CartId = cartId, ProductId = productId });
+        if (result.IsSuccess)
+        {
+            return Ok(result.Data);
+        }
+        return BadRequest(result.Errors);
     }
 }
-

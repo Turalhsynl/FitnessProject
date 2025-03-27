@@ -4,8 +4,9 @@ namespace Repository.Repositories;
 
 public interface ICartRepository
 {
-    Task<Cart?> GetByUserIdAsync(int userId);
+    Task<Cart> GetByIdAsync(int cartId);
+    Task<Cart> GetByIdWithProductsAsync(int cartId);
     Task AddAsync(Cart cart);
     Task UpdateAsync(Cart cart);
-    Task<bool> DeleteAsync(int userId);
+    Task RemoveProductAsync(int cartId, int productId);
 }

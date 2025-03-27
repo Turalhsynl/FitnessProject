@@ -8,6 +8,7 @@ using AutoMapper;
 using Domain.Entities;
 using static Application.CQRS.Categories.Handlers.Add;
 using static Application.CQRS.Users.Handlers.Register;
+using Application.CQRS.Carts.ResponseDto;
 
 namespace Application.AutoMapper;
 
@@ -28,5 +29,8 @@ public class MappingProfile : Profile
         CreateMap<Category, AddDto>();
         CreateMap<Category, GetAllCategoryDto>();
         CreateMap<Category, UpdateCategoryDto>();
+        CreateMap<Cart, CartDto>()
+                .ForMember(dest => dest.CartLines, opt => opt.MapFrom(src => src.CartLines));
+        CreateMap<CartLine, CartLineDto>();
     }
 }

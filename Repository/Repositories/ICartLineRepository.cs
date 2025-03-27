@@ -4,8 +4,10 @@ namespace Repository.Repositories;
 
 public interface ICartLineRepository
 {
-    Task<CartLine?> GetByIdAsync(int cartLineId);
     Task AddAsync(CartLine cartLine);
+    Task<CartLine> GetByIdAsync(int cartLineId);
+    Task<IEnumerable<CartLine>> GetByCartIdAsync(int cartId);
     Task UpdateAsync(CartLine cartLine);
-    Task<bool> DeleteAsync(int cartLineId);
+    Task RemoveAsync(int cartLineId);
+    Task RemoveByCartAndProductAsync(int cartId, int productId);
 }

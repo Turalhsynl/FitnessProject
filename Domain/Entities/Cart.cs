@@ -4,10 +4,9 @@ namespace Domain.Entities;
 
 public class Cart:BaseEntity
 {
-    public int Id { get; set; } 
     public int UserId { get; set; }
 
-    public List<CartLine> CartLines { get; set; } = new();
+    public List<CartLine> CartLines { get; set; } = new List<CartLine>();
 
-    public decimal TotalPrice => CartLines.Sum(cl => cl.TotalPrice);
+    public decimal TotalPrice => CartLines.Sum(cl => cl.Product.Price * cl.Quantity);
 }

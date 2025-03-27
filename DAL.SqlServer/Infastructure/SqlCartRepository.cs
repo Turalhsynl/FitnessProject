@@ -5,42 +5,44 @@ using Repository.Repositories;
 
 namespace DAL.SqlServer.Infastructure;
 
-public class SqlCartRepository : ICartRepository
+public class SqlCartRepository(AppDbContext context) : ICartRepository
 {
-    private readonly AppDbContext _context;
+    private readonly AppDbContext _context = context;
 
-    public SqlCartRepository(AppDbContext context)
+    public async Task<Cart> GetByIdAsync(int cartId)
     {
-        _context = context;
+        return await _context.Carts.FindAsync(cartId);
     }
 
-    public async Task<Cart?> GetByUserIdAsync(int userId)
+    public async Task<Cart> GetByIdWithProductsAsync(int cartId)
     {
         return await _context.Carts
             .Include(c => c.CartLines)
-            .FirstOrDefaultAsync(c => c.UserId == userId);
+            .ThenInclude(cl => cl.Product)
+            .FirstOrDefaultAsync(c => c.Id == cartId);
     }
 
     public async Task AddAsync(Cart cart)
     {
-        await _context.Carts.AddAsync(cart);
+        _context.Carts.Add(cart);
         await _context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Cart cart)
     {
-        cart.UpdatedDate = DateTime.UtcNow;
         _context.Carts.Update(cart);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> DeleteAsync(int userId)
+    public async Task RemoveProductAsync(int cartId, int productId)
     {
-        var cart = await _context.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
-        if (cart == null) return false;
+        var cartLine = await _context.CartLines
+            .FirstOrDefaultAsync(cl => cl.CartId == cartId && cl.ProductId == productId);
 
-        _context.Carts.Remove(cart);
-        await _context.SaveChangesAsync();
-        return true;
+        if (cartLine != null)
+        {
+            _context.CartLines.Remove(cartLine);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -4,7 +4,6 @@ namespace Domain.Entities;
 
 public class CartLine:BaseEntity
 {
-    public int Id { get; set; }
     public int CartId { get; set; }
     public Cart? Cart { get; set; }
 
@@ -13,5 +12,5 @@ public class CartLine:BaseEntity
 
     public int Quantity { get; set; }
 
-    public decimal TotalPrice => Product.Price * Quantity;
+    public decimal LineTotal => Product.Price * Quantity;
 }
