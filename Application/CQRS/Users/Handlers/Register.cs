@@ -3,6 +3,7 @@ using AutoMapper;
 using Common.GlobalResponses.Generics;
 using Common.Security;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Repository.Common;
 
@@ -14,7 +15,7 @@ public class Register
     {
         public string Firstname { get; set; }
         public string Lastname { get; set; }
-        public string Gender { get; set; }
+        public UserGender Gender { get; set; }
         public int Age { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

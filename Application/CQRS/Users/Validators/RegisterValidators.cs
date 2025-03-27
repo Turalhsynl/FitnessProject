@@ -21,7 +21,7 @@ public class RegisterValidators : AbstractValidator<Register.RegisterCommand>
 
         RuleFor(u => u.Gender)
             .NotEmpty()
-            .MaximumLength(20);
+            .IsInEnum();
 
         RuleFor(u => u.Email)
             .NotEmpty()

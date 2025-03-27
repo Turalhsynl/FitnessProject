@@ -1,6 +1,7 @@
 ﻿using Application.CQRS.Users.ResponseDto;
 using AutoMapper;
 using Common.GlobalResponses.Generics;
+using Domain.Enums;
 using MediatR;
 using Repository.Common;
 using System.Security;
@@ -14,7 +15,7 @@ public class Update
         public int Id { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
-        public string Gender { get; set; }
+        public UserGender Gender { get; set; }
         public int Age { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
