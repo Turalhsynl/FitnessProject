@@ -29,7 +29,8 @@ public sealed class AddProductToCartHandler(IUnitOfWork unitOfWork)
         {
             CartId = cart.Id,
             ProductId = product.Id,
-            Quantity = request.Quantity
+            Quantity = request.Quantity,
+            Product = product
         };
 
         await _unitOfWork.CartLineRepository.AddAsync(cartLine);
