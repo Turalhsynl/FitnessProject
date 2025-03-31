@@ -1,7 +1,11 @@
 ﻿using Application.CQRS.Carts.ResponseDto;
 using Common.GlobalResponses.Generics;
+using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Common;
+using System.Security.Claims;
 
 namespace WebApi.Controllers;
 
@@ -12,6 +16,7 @@ public class CartController(ISender sender) : ControllerBase
     private readonly ISender _sender = sender;
 
     [HttpPost("create")]
+    [AllowAnonymous]
     public async Task<IActionResult> CreateCart([FromBody] CreateCartCommand command)
     {
         var result = await _sender.Send(command);
@@ -53,5 +58,18 @@ public class CartController(ISender sender) : ControllerBase
             return Ok(result.Data);
         }
         return BadRequest(result.Errors);
+    }
+
+    [HttpGet("get/{userId}")]
+    public async Task<IActionResult> GetCartByUserId(int userId)
+    {
+        var result = await _sender.Send(new GetCartByUserIdQuery { UserId = userId });
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Errors);
+        }
+
+        return Ok(result.Data);
     }
 }

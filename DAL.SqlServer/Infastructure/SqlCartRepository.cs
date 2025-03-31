@@ -45,4 +45,10 @@ public class SqlCartRepository(AppDbContext context) : ICartRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<Cart> GetCartByUserIdAsync(int userId)
+    {
+        return await _context.Carts.FirstOrDefaultAsync(cart => cart.UserId == userId && !cart.IsDeleted);
+    }
+
 }
