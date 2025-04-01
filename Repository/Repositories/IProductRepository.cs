@@ -13,4 +13,5 @@ public interface IProductRepository
     Task AddToCartAsync(int productId, int userId, int quantity);
     Task<IEnumerable<Product>> GetFavoritesByUserAsync(int userId);
     Task<IEnumerable<Product>> GetCartByUserAsync(int userId);
+    Task<IEnumerable<Product>> SearchProduct(string text);
 }

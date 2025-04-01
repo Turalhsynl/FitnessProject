@@ -45,7 +45,12 @@ public class SqlProductRepository(AppDbContext context) : IProductRepository
         //}
         throw new NotImplementedException();
     }
-
+    public async Task<IEnumerable<Product>> SearchPost(string text)
+    {
+        text = text.ToLower();
+        var posts = await _context.Products.Where(x => x.Name.ToLower().Contains(text) || x.Description.ToLower().Contains(text)).ToListAsync();
+        return posts;
+    }
     public IQueryable<Product> GetAll()
     {
         return _context.Products;
@@ -95,5 +100,13 @@ public class SqlProductRepository(AppDbContext context) : IProductRepository
     {
         _context.Products.Update(product);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<Product>> SearchProduct(string text)
+    {
+        text = text.ToLower(); 
+        return await _context.Products
+            .Where(x => x.Name.ToLower().Contains(text) || x.Description.ToLower().Contains(text))
+            .ToListAsync();
     }
 }

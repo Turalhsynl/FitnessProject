@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Application.CQRS.Products.Handlers.SearchProduct;
 using static DeleteProduct;
 
 namespace FitnessProject.API.Controllers
@@ -61,6 +62,15 @@ namespace FitnessProject.API.Controllers
             await _sender.Send(request);
             return Ok(new { Message = "Product updated successfully." });
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string text)
+        {
+            var query = new SearchProductQuery(text);
+            var result = await _sender.Send(query);
+            return Ok(result);
+        }
+
 
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteAsync([FromQuery] int id)

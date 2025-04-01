@@ -1,9 +1,14 @@
 ﻿using Application;
 using Application.Security;
 using DAL.SqlServer;
+using DAL.SqlServer.Context;
+using DAL.SqlServer.Infastructure;
 using FitnessProject.API.Infrastructure;
 using FitnessProject.API.Security;
+using MediatR;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using Repository.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,8 +36,14 @@ builder.Services.AddApplicationServices();
 builder.Services.AddSwaggerService();
 builder.Services.AddAuthenticationService(builder.Configuration);
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IProductRepository, SqlProductRepository>();
+builder.Services.AddMediatR(typeof(Program));
 
 var app = builder.Build();
+
 
 if (app.Environment.IsDevelopment())
 {
