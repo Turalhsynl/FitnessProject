@@ -9,4 +9,6 @@ public interface ICategoryRepository
     Task<bool> Delete(int id, int deletedBy);
     IQueryable<Category> GetAll();
     Task<Category> GetByIdAsync(int id);
+
+
 }

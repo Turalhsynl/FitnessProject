@@ -1,5 +1,6 @@
 ﻿using DAL.SqlServer.Context;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Repository.Repositories;
 
@@ -108,5 +109,22 @@ public class SqlProductRepository(AppDbContext context) : IProductRepository
         return await _context.Products
             .Where(x => x.Name.ToLower().Contains(text) || x.Description.ToLower().Contains(text))
             .ToListAsync();
+    }
+
+    public IQueryable<Product> GetProductsByPrice(int categoryId, PriceSortOrder sortOrder)
+    {
+        var query = _context.Products.Where(p => p.CategoryId == categoryId);
+
+        switch (sortOrder)
+        {
+            case PriceSortOrder.LowToHigh:
+                query = query.OrderBy(p => p.Price);
+                break;
+            case PriceSortOrder.HighToLow:
+                query = query.OrderByDescending(p => p.Price);
+                break;
+        }
+
+        return query;
     }
 }

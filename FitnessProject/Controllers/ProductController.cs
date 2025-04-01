@@ -1,7 +1,9 @@
-﻿using MediatR;
+﻿using Domain.Enums;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Application.CQRS.Products.Handlers.GetProductsByPrice;
 using static Application.CQRS.Products.Handlers.SearchProduct;
 using static DeleteProduct;
 
@@ -54,6 +56,13 @@ namespace FitnessProject.API.Controllers
             }
 
             return Ok(result.Data);
+        }
+        [HttpGet("category/{categoryId}")]
+        public async Task<IActionResult> GetProductsByCategory(int categoryId, [FromQuery] PriceSortOrder sortOrder)
+        {
+            var query = new GetProductsByPriceQuery(categoryId, sortOrder);
+            var products = await _sender.Send(query);
+            return Ok(products);
         }
 
         [HttpPut("Update")]
