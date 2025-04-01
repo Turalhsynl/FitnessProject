@@ -50,7 +50,7 @@ namespace Application.CQRS.Categories.Handlers
                         Description = p.Description,
                         Price = p.Price,
                         ImageUrl = p.ImageUrl,
-                        Color = p.Color,
+                        Color = p.Color.ToString(),
                         CategoryId = p.CategoryId
                     }).ToList()
                 };

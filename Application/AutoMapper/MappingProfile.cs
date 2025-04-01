@@ -9,6 +9,7 @@ using Domain.Entities;
 using static Application.CQRS.Categories.Handlers.Add;
 using static Application.CQRS.Users.Handlers.Register;
 using Application.CQRS.Carts.ResponseDto;
+using System.Drawing;
 
 namespace Application.AutoMapper;
 
@@ -20,7 +21,9 @@ public class MappingProfile : Profile
         CreateMap<User, RegisterDto>();
         CreateMap<User, GetAllDto>();
         CreateMap<User, UpdateDto>();
-        CreateMap<Product, GetAllProductDto>();
+        CreateMap<Product, GetAllProductDto>()
+     .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.Color.ToString()));  // Converts enum to string
+
         CreateMap<Product, GetProductByIdDto>();
         CreateMap<Product, UpdateProductDto>();
         CreateMap<Product, AddProductDto>();

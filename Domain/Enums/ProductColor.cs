@@ -1,6 +1,6 @@
 ﻿namespace Domain.Enums;
 
-public enum ProductColors : int
+public enum ProductColors
 {
     Black = 1,
     Grey = 2,
