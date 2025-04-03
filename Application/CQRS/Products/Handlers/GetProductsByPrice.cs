@@ -4,7 +4,6 @@ using MediatR;
 using Repository.Repositories;
 
 namespace Application.CQRS.Products.Handlers;
-
 public class GetProductsByPrice
 {
     public class GetProductsByPriceQuery : IRequest<IQueryable<Product>>
@@ -30,10 +29,29 @@ public class GetProductsByPrice
 
         public async Task<IQueryable<Product>> Handle(GetProductsByPriceQuery request, CancellationToken cancellationToken)
         {
-            var productsQuery = _productRepository.GetProductsByPrice(request.CategoryId, request.SortOrder);
+            IQueryable<Product> productsQuery;
+
+            if (request.CategoryId == 0)
+            {
+                productsQuery = _productRepository.GetAll();
+            }
+            else
+            {
+                productsQuery = _productRepository.GetProductsByPrice(request.CategoryId, request.SortOrder);
+            }
+
+            switch (request.SortOrder)
+            {
+                case PriceSortOrder.LowToHigh:
+                    productsQuery = productsQuery.OrderBy(p => p.Price);
+                    break;
+                case PriceSortOrder.HighToLow:
+                    productsQuery = productsQuery.OrderByDescending(p => p.Price);
+                    break;
+            }
+
             return productsQuery;
         }
     }
-
-
 }
+
