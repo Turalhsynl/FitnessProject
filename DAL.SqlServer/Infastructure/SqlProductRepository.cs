@@ -127,4 +127,14 @@ public class SqlProductRepository(AppDbContext context) : IProductRepository
 
         return query;
     }
+    public async Task<IEnumerable<Product>> PageProductAsync(int page, int pageSize)
+    {
+        int skipAmount = (page - 1) * pageSize;
+        skipAmount = Math.Max(skipAmount, 0);
+
+        return await _context.Products
+            .Skip(skipAmount)
+            .Take(pageSize)
+            .ToListAsync();
+    }
 }

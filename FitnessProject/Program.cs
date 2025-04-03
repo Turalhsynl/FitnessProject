@@ -36,8 +36,6 @@ builder.Services.AddApplicationServices();
 builder.Services.AddSwaggerService();
 builder.Services.AddAuthenticationService(builder.Configuration);
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IProductRepository, SqlProductRepository>();
 builder.Services.AddMediatR(typeof(Program));

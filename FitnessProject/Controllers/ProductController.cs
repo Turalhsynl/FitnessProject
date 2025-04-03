@@ -1,9 +1,11 @@
-﻿using Domain.Enums;
+﻿using Application.CQRS.Products.Handlers;
+using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static Application.CQRS.Products.Handlers.GetProductsByPrice;
+using static Application.CQRS.Products.Handlers.PageProduct;
 using static Application.CQRS.Products.Handlers.SearchProduct;
 using static DeleteProduct;
 
@@ -42,6 +44,13 @@ namespace FitnessProject.API.Controllers
             }
 
             return Ok(result.Data);
+        }
+
+        [HttpGet("paged")]
+        public async Task<IActionResult> GetPagedPosts([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = await _sender.Send(new PageProductQuery(page, pageSize));
+            return Ok(result);
         }
 
         [HttpGet("GetAll")]
