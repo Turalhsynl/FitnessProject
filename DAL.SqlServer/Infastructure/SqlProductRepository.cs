@@ -137,4 +137,9 @@ public class SqlProductRepository(AppDbContext context) : IProductRepository
             .Take(pageSize)
             .ToListAsync();
     }
+
+    public IQueryable<Product> GetProductsByColor(ProductColors color)
+    {
+        return _context.Products.Where(p => p.Color == color);
+    }
 }

@@ -17,4 +17,5 @@ public interface IProductRepository
     Task<IEnumerable<Product>> SearchProduct(string text);
     IQueryable<Product> GetProductsByPrice(int categoryId, PriceSortOrder sortOrder);
     Task<IEnumerable<Product>> PageProductAsync(int page, int pageSize);
+    IQueryable<Product> GetProductsByColor(ProductColors color);
 }
