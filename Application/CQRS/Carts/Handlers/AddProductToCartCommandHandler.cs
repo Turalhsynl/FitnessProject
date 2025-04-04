@@ -26,8 +26,19 @@ public sealed class AddProductToCartHandler(IUnitOfWork unitOfWork)
         }
 
         var cartLines = await _unitOfWork.CartLineRepository.GetByCartIdAsync(cart.Id);
-
         var existingCartLine = cartLines.FirstOrDefault(cl => cl.ProductId == product.Id);
+
+        int existingQuantityInCart = existingCartLine?.Quantity ?? 0;
+        int totalRequestedQuantity = existingQuantityInCart + request.Quantity;
+
+        if (totalRequestedQuantity > product.Quantity)
+        {
+            return new Result<Unit>
+            {
+                IsSuccess = false,
+                Errors = [$"Stockda yalnız {product.Quantity - existingQuantityInCart} ədəd qalıb."]
+            };
+        }
 
         if (existingCartLine != null)
         {
@@ -50,4 +61,5 @@ public sealed class AddProductToCartHandler(IUnitOfWork unitOfWork)
         await _unitOfWork.SaveChangeAsync();
         return new Result<Unit> { IsSuccess = true };
     }
+
 }
