@@ -1,5 +1,6 @@
 ﻿using Application.CQRS.Users.ResponseDto;
 using AutoMapper;
+using Common.Exceptions;
 using Common.GlobalResponses.Generics;
 using Common.Security;
 using Domain.Entities;
@@ -29,7 +30,7 @@ public class Register
         {
 
             var currentUser = await _unitOfWork.UserRepository.GetUserByEmailAsync(request.Email);
-            if (currentUser != null) throw new Exception("User is already exist with provided mail");
+            if (currentUser != null) throw new ConflictException("User is already exist with provided mail");
 
             var user = _mapper.Map<User>(request);
 

@@ -6,4 +6,14 @@ public class NotFoundException : Exception
     {
 
     }
+
+    public NotFoundException(string entityName, string identifier) : base($"{entityName} not found with identifier: {identifier}")
+    {
+        
+    }
+
+    public NotFoundException(string entityName, int id) : base($"{entityName} not found with identifier: {id}")
+    {
+
+    }
 }
