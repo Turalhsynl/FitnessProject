@@ -1,6 +1,7 @@
 ﻿using Application.CQRS.Products.ResponseDto;
 using Application.CQRS.Users.ResponseDto;
 using AutoMapper;
+using Common.Exceptions;
 using Common.GlobalResponses.Generics;
 using Domain.Enums;
 using MediatR;
@@ -35,7 +36,7 @@ public class UpdateProduct
         public async Task<Result<UpdateProductDto>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             var currentProduct = await _unitOfWork.ProductRepository.GetByIdAsync(request.Id);
-            if (currentProduct == null) throw new Exception("Product not found");
+            if (currentProduct == null) throw new NotFoundException("Product", request.Id);
 
             currentProduct.Name = request.Name;
             currentProduct.Description = request.Description;

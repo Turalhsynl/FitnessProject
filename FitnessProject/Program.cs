@@ -4,6 +4,7 @@ using DAL.SqlServer;
 using DAL.SqlServer.Context;
 using DAL.SqlServer.Infastructure;
 using FitnessProject.API.Infrastructure;
+using FitnessProject.API.Infrastructure.Middlewares;
 using FitnessProject.API.Security;
 using MediatR;
 using Microsoft.AspNetCore.Diagnostics;
@@ -57,5 +58,7 @@ app.UseAuthorization();
 
 
 app.MapControllers();
+
+app.UseMiddleware<FitnessProject.API.Infrastructure.Middlewares.ExceptionHandlerMiddleware>();
 
 app.Run();

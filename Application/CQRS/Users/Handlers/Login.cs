@@ -1,5 +1,6 @@
 ﻿using Application.CQRS.Users.ResponseDto;
 using Application.Services;
+using Common.Exceptions;
 using Common.GlobalResponses.Generics;
 using Common.Security;
 using Domain.Entities;
@@ -26,13 +27,13 @@ public class Login
 
         public async Task<Result<LoginDto>> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
-            User currentUser = await _unitOfWork.UserRepository.GetUserByEmailAsync(request.Email) ?? throw new Exception("User does not exist");
+            User currentUser = await _unitOfWork.UserRepository.GetUserByEmailAsync(request.Email) ?? throw new NotFoundException("User", request.Email);
 
             var hashedPassword = PasswordHasher.ComputeStringToSha256Hash(request.Password);
 
             if (hashedPassword != currentUser.Password)
             {
-                throw new Exception("Wrong Password");
+                throw new UnautorizedExcepition("Wrong Password");
             }
 
             if (currentUser.Email == request.Email && currentUser.Password == hashedPassword)
