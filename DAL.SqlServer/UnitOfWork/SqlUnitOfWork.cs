@@ -16,6 +16,7 @@ public class SqlUnitOfWork(string connectionString, AppDbContext context) : IUni
     public SqlCategoryRepository _categoryRepository;
     public SqlCartRepository _cartRepository;
     public SqlCartLineRepository _cartLineRepository;
+    public SqlFavoriteRepository _favoriteRepository;
 
     public IUserRepository UserRepository => _userRepository ?? new SqlUserRepository(_context);
     public IRefreshTokenRepository RefreshTokenRepository => _refreshTokenRepository ?? new SqlRefreshTokenRepository(_context);
@@ -23,6 +24,9 @@ public class SqlUnitOfWork(string connectionString, AppDbContext context) : IUni
     public ICategoryRepository CategoryRepository => _categoryRepository ?? new SqlCategoryRepository(_context);
     public ICartRepository CartRepository => _cartRepository ??= new SqlCartRepository(_context);
     public ICartLineRepository CartLineRepository => _cartLineRepository ??= new SqlCartLineRepository(_context);
+
+    public IFavoriteRepository FavoriteRepository => _favoriteRepository ??= new SqlFavoriteRepository(_context);
+
     public async Task<int> SaveChangeAsync()
     {
         return await _context.SaveChangesAsync();

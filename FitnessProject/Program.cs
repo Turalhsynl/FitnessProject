@@ -14,15 +14,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllWithCredentials",
+    options.AddPolicy("AllowSpecificOrigins",
         policy =>
         {
-            policy.SetIsOriginAllowed(_ => true)
+            policy.WithOrigins("http://localhost:5173", "https://localhost:7298") // Frontend və Swagger
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
         });
 });
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -50,7 +51,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowAllWithCredentials");
+app.UseCors("AllowSpecificOrigins");
 
 app.UseAuthorization();
 

@@ -90,18 +90,24 @@ namespace FitnessProject.API.Controllers
             return Ok(result);
         }
 
+
         [HttpGet("products/by-color")]
-        public async Task<IActionResult> GetProductsByColor([FromQuery] ProductColors color, [FromQuery] bool ascending = true)
+        public async Task<IActionResult> GetProductsByColor(
+            [FromQuery] List<ProductColors> colors,
+            [FromQuery] int categoryId = 0,
+            [FromQuery] bool ascending = true)
         {
             var query = new GetProductsByColorQuery
             {
-                Color = color,
+                Colors = colors,
+                CategoryId = categoryId,
                 Ascending = ascending
             };
 
             var result = await _sender.Send(query);
             return Ok(result);
         }
+
 
 
         [HttpDelete("Delete")]

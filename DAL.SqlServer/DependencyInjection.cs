@@ -1,8 +1,10 @@
 ﻿using DAL.SqlServer.Context;
+using DAL.SqlServer.Infastructure;
 using DAL.SqlServer.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repository.Common;
+using Repository.Repositories;
 
 namespace DAL.SqlServer;
 
@@ -17,6 +19,7 @@ public static class DependencyInjection
             var dbContext = opt.GetRequiredService<AppDbContext>();
             return new SqlUnitOfWork(connectionstring, dbContext);
         });
+        services.AddScoped<IFavoriteRepository, SqlFavoriteRepository>();
         return services;
     }
 }

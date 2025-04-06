@@ -11,9 +11,11 @@ public class GetProductsByColor
 {
     public class GetProductsByColorQuery : IRequest<List<GetAllProductDto>>
     {
-        public ProductColors Color { get; set; }
+        public List<ProductColors> Colors { get; set; } = new();
+        public int CategoryId { get; set; }
         public bool Ascending { get; set; }
     }
+
     public class GetProductsByColorQueryHandler : IRequestHandler<GetProductsByColorQuery, List<GetAllProductDto>>
     {
         private readonly IProductRepository _repository;
@@ -27,16 +29,20 @@ public class GetProductsByColor
 
         public async Task<List<GetAllProductDto>> Handle(GetProductsByColorQuery request, CancellationToken cancellationToken)
         {
-            var query = _repository.GetProductsByColor(request.Color);
+            var query = _repository.GetAll();
 
-            if (request.Ascending)
+            if (request.CategoryId != 0)
             {
-                query = query.OrderBy(p => p.Color);
+                query = query.Where(p => p.CategoryId == request.CategoryId);
             }
-            else
+            if (request.Colors.Any())
             {
-                query = query.OrderByDescending(p => p.Color);
+                query = query.Where(p => request.Colors.Contains(p.Color));
             }
+
+            query = request.Ascending
+                ? query.OrderBy(p => p.Color)
+                : query.OrderByDescending(p => p.Color);
 
             var products = await query.ToListAsync(cancellationToken);
 
@@ -45,6 +51,5 @@ public class GetProductsByColor
             return productDtos;
         }
     }
-
-
 }
+

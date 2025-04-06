@@ -10,5 +10,6 @@ public interface IUnitOfWork
     public ICategoryRepository CategoryRepository { get; }
     public ICartRepository CartRepository { get; }
     public ICartLineRepository CartLineRepository { get; }
+    public IFavoriteRepository FavoriteRepository { get; }
     Task<int> SaveChangeAsync();
 }

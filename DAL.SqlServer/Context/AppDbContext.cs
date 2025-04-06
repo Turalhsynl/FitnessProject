@@ -15,4 +15,5 @@ public class AppDbContext : DbContext
     public DbSet<Category> Categories { get; set; }
     public DbSet<Cart> Carts { get; set; }
     public DbSet<CartLine> CartLines { get; set; }
+    public DbSet<Favorite> Favorites { get; set; }
 }

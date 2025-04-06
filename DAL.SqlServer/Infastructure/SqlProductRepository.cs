@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Repository.Repositories;
+using System.Drawing;
 
 namespace DAL.SqlServer.Infastructure;
 
@@ -138,8 +139,21 @@ public class SqlProductRepository(AppDbContext context) : IProductRepository
             .ToListAsync();
     }
 
-    public IQueryable<Product> GetProductsByColor(ProductColors color)
+    public IQueryable<Product> GetProductsByColorsAndCategory(List<ProductColors> colors, int categoryId)
     {
-        return _context.Products.Where(p => p.Color == color);
+        var query = _context.Products.AsQueryable();
+
+        if (colors.Any())
+        {
+            query = query.Where(p => colors.Contains(p.Color));
+        }
+
+        if (categoryId != 0)
+        {
+            query = query.Where(p => p.CategoryId == categoryId);
+        }
+
+        return query;
     }
+
 }
