@@ -10,6 +10,9 @@ using static Application.CQRS.Categories.Handlers.Add;
 using static Application.CQRS.Users.Handlers.Register;
 using Application.CQRS.Carts.ResponseDto;
 using System.Drawing;
+using Application.CQRS.Favorites.Handlers;
+using static Application.CQRS.Favorites.Handlers.AddFavorite;
+using Application.CQRS.Favorites.ResponseDto;
 
 namespace Application.AutoMapper;
 
@@ -22,7 +25,7 @@ public class MappingProfile : Profile
         CreateMap<User, GetAllDto>();
         CreateMap<User, UpdateDto>();
         CreateMap<Product, GetAllProductDto>()
-     .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.Color.ToString()));  // Converts enum to string
+     .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.Color.ToString()));
 
         CreateMap<Product, GetProductByIdDto>();
         CreateMap<Product, UpdateProductDto>();
@@ -35,5 +38,11 @@ public class MappingProfile : Profile
         CreateMap<Cart, CartDto>()
                 .ForMember(dest => dest.CartLines, opt => opt.MapFrom(src => src.CartLines));
         CreateMap<CartLine, CartLineDto>();
+        CreateMap<Category, UpdateCategoryDto>();
+        CreateMap<Favorite, AddFavorite>();
+        CreateMap<Favorite, GetFavorites>();
+        CreateMap<Favorite, RemoveFavorite>();
+        CreateMap<Favorite, FavoriteDto>();
+        CreateMap<AddFavoriteCommand, Favorite>();
     }
 }

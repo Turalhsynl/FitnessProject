@@ -1,4 +1,8 @@
-﻿using Domain.Entities;
+﻿using Application.CQRS.Favorites.ResponseDto;
+using AutoMapper;
+using Common.Exceptions;
+using Common.GlobalResponses.Generics;
+using Domain.Entities;
 using MediatR;
 using Repository.Repositories;
 
@@ -6,22 +10,32 @@ namespace Application.CQRS.Favorites.Handlers;
 
 public class AddFavorite
 {
-    public class AddFavoriteCommand : IRequest<bool>
+    public class AddFavoriteCommand : IRequest<Result<FavoriteDto>>
     {
         public int UserId { get; set; }
         public int ProductId { get; set; }
     }
-    public class AddFavoriteCommandHandler : IRequestHandler<AddFavoriteCommand, bool>
-    {
-        private readonly IFavoriteRepository _repository;
 
-        public AddFavoriteCommandHandler(IFavoriteRepository repository)
+    public sealed class Handler : IRequestHandler<AddFavoriteCommand, Result<FavoriteDto>>
+    {
+        private readonly IFavoriteRepository _favoriteRepository;
+        private readonly IMapper _mapper;
+
+        public Handler(IFavoriteRepository favoriteRepository, IMapper mapper)
         {
-            _repository = repository;
+            _favoriteRepository = favoriteRepository;
+            _mapper = mapper;
         }
 
-        public Task<bool> Handle(AddFavoriteCommand request, CancellationToken cancellationToken)
+        public async Task<Result<FavoriteDto>> Handle(AddFavoriteCommand request, CancellationToken cancellationToken)
         {
+
+            if (_favoriteRepository.Exists(request.UserId, request.ProductId))
+            {
+                throw new ConflictException("Favorite already exists for this product.");
+            }
+
+
             var favorite = new Favorite
             {
                 UserId = request.UserId,
@@ -29,9 +43,22 @@ public class AddFavorite
                 CreatedAt = DateTime.Now
             };
 
-            var result = _repository.Add(favorite);
-            return Task.FromResult(result);
+            var result = _favoriteRepository.Add(favorite);
+
+            if (!result)
+            {
+                throw new Exception("Failed to add favorite.");
+            }
+
+            var favoriteDto = _mapper.Map<FavoriteDto>(favorite);
+
+            return new Result<FavoriteDto>
+            {
+                Data = favoriteDto,
+                Errors = new List<string>(),
+                IsSuccess = true
+            };
         }
     }
-
 }
+

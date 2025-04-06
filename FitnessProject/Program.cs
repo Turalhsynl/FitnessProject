@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigins",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173", "https://localhost:7298") // Frontend və Swagger
+            policy.WithOrigins("http://localhost:5173", "https://localhost:5117") // Frontend və Swagger
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();

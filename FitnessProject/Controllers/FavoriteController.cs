@@ -23,20 +23,30 @@ public class FavoriteController : ControllerBase
     public async Task<IActionResult> AddFavorite([FromBody] AddFavoriteCommand command)
     {
         var result = await _sender.Send(command);
-        if (result)
+
+        if (result.IsSuccess)
+        {
             return Ok(new { message = "Favoriye eklendi." });
+        }
         else
-            return BadRequest(new { message = "Favori eklenirken bir hata oluştu." });
+        {
+            return BadRequest(new { message = "Favori eklenirken bir hata oluştu.", errors = result.Errors });
+        }
     }
 
     [HttpPost("remove")]
     public async Task<IActionResult> RemoveFavorite([FromBody] RemoveFavoriteCommand command)
     {
         var result = await _sender.Send(command);
-        if (result)
+
+        if (result.IsSuccess)
+        {
             return Ok(new { message = "Favoriden çıkarıldı." });
+        }
         else
-            return BadRequest(new { message = "Favori silinirken bir hata oluştu." });
+        {
+            return BadRequest(new { message = "Favori silinirken bir hata oluştu.", errors = result.Errors });
+        }
     }
 
     [HttpGet("list/{userId}")]
@@ -44,6 +54,15 @@ public class FavoriteController : ControllerBase
     {
         var query = new GetFavoritesQuery { UserId = userId };
         var result = await _sender.Send(query);
-        return Ok(result);
+
+        if (result.IsSuccess)
+        {
+            return Ok(result.Data);
+        }
+        else
+        {
+            return BadRequest(new { message = "Favoriler alınırken bir hata oluştu.", errors = result.Errors });
+        }
     }
+
 }
