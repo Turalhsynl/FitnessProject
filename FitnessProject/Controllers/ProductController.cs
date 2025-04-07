@@ -1,4 +1,5 @@
 ﻿using Application.CQRS.Products.Handlers;
+using Application.CQRS.Products.ResponseDto;
 using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static Application.CQRS.Products.Handlers.GetProductsByColor;
 using static Application.CQRS.Products.Handlers.GetProductsByPrice;
-using static Application.CQRS.Products.Handlers.PageProduct;
 using static Application.CQRS.Products.Handlers.SearchProduct;
 using static DeleteProduct;
 
@@ -47,10 +47,24 @@ namespace FitnessProject.API.Controllers
             return Ok(result.Data);
         }
 
-        [HttpGet("paged")]
-        public async Task<IActionResult> GetPagedPosts([FromQuery] int page, [FromQuery] int pageSize)
+        [HttpGet("filtered-paged")]
+        public async Task<ActionResult<FilteredPagedProductResponse>> GetFilteredPagedProducts(
+        [FromQuery] List<ProductColors> colors,
+        [FromQuery] int categoryId = 0,
+        [FromQuery] bool ascending = true,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10)
         {
-            var result = await _sender.Send(new PageProductQuery(page, pageSize));
+            var query = new FilteredPagedProduct.Query
+            {
+                Colors = colors,
+                CategoryId = categoryId,
+                Ascending = ascending,
+                Page = page,
+                PageSize = pageSize
+            };
+
+            var result = await _sender.Send(query);
             return Ok(result);
         }
 
