@@ -41,8 +41,8 @@ public class GetProductsByColor
             }
 
             query = request.Ascending
-                ? query.OrderBy(p => p.Color)
-                : query.OrderByDescending(p => p.Color);
+                ? query.OrderBy(p => p.Price)
+                : query.OrderByDescending(p => p.Price);
 
             var products = await query.ToListAsync(cancellationToken);
 
