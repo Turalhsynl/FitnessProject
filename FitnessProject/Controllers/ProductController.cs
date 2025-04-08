@@ -5,7 +5,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using static Application.CQRS.Products.Handlers.GetProductsByColor;
 using static Application.CQRS.Products.Handlers.GetProductsByPrice;
 using static Application.CQRS.Products.Handlers.SearchProduct;
 using static DeleteProduct;
@@ -14,7 +13,7 @@ namespace FitnessProject.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ProductController : ControllerBase
     {
         private readonly ISender _sender;
@@ -103,26 +102,6 @@ namespace FitnessProject.API.Controllers
             var result = await _sender.Send(query);
             return Ok(result);
         }
-
-
-        [HttpGet("products/by-color")]
-        public async Task<IActionResult> GetProductsByColor(
-            [FromQuery] List<ProductColors> colors,
-            [FromQuery] int categoryId = 0,
-            [FromQuery] bool ascending = true)
-        {
-            var query = new GetProductsByColorQuery
-            {
-                Colors = colors,
-                CategoryId = categoryId,
-                Ascending = ascending
-            };
-
-            var result = await _sender.Send(query);
-            return Ok(result);
-        }
-
-
 
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteAsync([FromQuery] int id)
