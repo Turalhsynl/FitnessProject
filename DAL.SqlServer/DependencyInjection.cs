@@ -20,6 +20,7 @@ public static class DependencyInjection
             return new SqlUnitOfWork(connectionstring, dbContext);
         });
         services.AddScoped<IFavoriteRepository, SqlFavoriteRepository>();
+        services.AddScoped<IRecipeRepository, SqlRecipeRepository>();
         return services;
     }
 }

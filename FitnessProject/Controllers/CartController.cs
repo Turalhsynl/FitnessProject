@@ -11,6 +11,7 @@ namespace WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class CartController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

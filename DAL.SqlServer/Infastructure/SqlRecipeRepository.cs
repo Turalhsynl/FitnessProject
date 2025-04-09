@@ -57,8 +57,14 @@ public class SqlRecipeRepository(AppDbContext context) : IRecipeRepository
 
     public async Task<IEnumerable<Recipe>> SearchByNameAsync(string name)
     {
-        return await _context.Recipes.Where(r=> r.Name == name).ToListAsync();
+        name = name.ToLower();
+
+        return await _context.Recipes
+            .Where(r => r.Name.ToLower().Contains(name) || r.Description.ToLower().Contains(name))
+            .ToListAsync();
     }
+
+
 
     public async Task<Recipe> UpdateAsync(Recipe recipe)
     {
