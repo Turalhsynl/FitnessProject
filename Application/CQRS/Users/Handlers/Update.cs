@@ -1,6 +1,7 @@
 ﻿using Application.CQRS.Users.ResponseDto;
 using AutoMapper;
 using Common.GlobalResponses.Generics;
+using Common.Security;
 using MediatR;
 using Repository.Common;
 using System.Security;
@@ -38,12 +39,14 @@ public class Update
             var currentUser = await _unitOfWork.UserRepository.GetByIdAsync(request.Id);
             if (currentUser == null) throw new Exception("User not found");
 
+            var hashPassword = PasswordHasher.ComputeStringToSha256Hash(request.Password);
+
             currentUser.Firstname = request.Firstname;
             currentUser.Lastname = request.Lastname;
             currentUser.Gender = request.Gender;
             currentUser.Age = request.Age;
             currentUser.Email = request.Email;
-            currentUser.Password = request.Password;
+            currentUser.Password = hashPassword;
             currentUser.Weight = request.Weight;
             currentUser.Height = request.Height;
             currentUser.UpdatedBy = 1;
