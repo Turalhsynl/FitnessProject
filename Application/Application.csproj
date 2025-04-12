@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <Folder Include="CQRS\Categories\Validators\" />
+    <Folder Include="CQRS\FitnessPrograms\Validators\" />
   </ItemGroup>
 
 </Project>
