@@ -1,4 +1,5 @@
 ﻿using Application.CQRS.FitnessPrograms.ResponseDto;
+using Application.CQRS.Recipes.ResponseDto;
 using Common.GlobalResponses.Generics;
 using MediatR;
 using Repository.Common;
@@ -29,6 +30,23 @@ public class GetFitnessProgramById
                 };
             }
 
+            // Reseptləri gətir
+            var recipes = await _unitOfWork.FitnessProgramRecipeRepository.GetRecipesByFitnessProgramIdAsync(program.Id);
+
+            // Reseptləri RecipeDto-ya map edək
+            var recipeDtos = recipes.Select(r => new RecipeDto
+            {
+                Id = r.Id,
+                Name = r.Name,
+                Description = r.Description,
+                Ingredients = r.Ingredients,
+                Instructions = r.Instructions,
+                ImageUrl = r.ImageUrl,
+                Calories = r.Calories,
+                MealType = r.MealType
+            }).ToList();
+
+            // DTO-nu doldur
             var fitnessProgramDto = new FitnessProgramDto
             {
                 Id = program.Id,
@@ -39,6 +57,7 @@ public class GetFitnessProgramById
                 Gender = program.Gender,
                 Price = program.Price,
                 VideoUrl = program.VideoUrl,
+                Recipes = recipeDtos // Əlavə etdik
             };
 
             return new Result<FitnessProgramDto>
@@ -48,6 +67,7 @@ public class GetFitnessProgramById
                 Errors = []
             };
         }
+
     }
 
 }

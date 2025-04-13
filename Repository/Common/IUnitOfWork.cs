@@ -15,6 +15,7 @@ public interface IUnitOfWork
     public IRecipeRepository RecipeRepository { get; }
 
     public IFitnessProgramRepository FitnessProgramRepository { get; }
+    public IFitnessProgramRecipeRepository FitnessProgramRecipeRepository { get; }
 
     Task<int> SaveChangeAsync();
 }

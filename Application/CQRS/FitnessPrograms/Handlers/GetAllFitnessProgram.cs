@@ -1,4 +1,5 @@
 ﻿using Application.CQRS.FitnessPrograms.ResponseDto;
+using Application.CQRS.Recipes.ResponseDto;
 using AutoMapper;
 using Common.GlobalResponses.Generics;
 using MediatR;
@@ -24,24 +25,45 @@ public class GetAllFitnessProgram
                 return new Result<List<FitnessProgramDto>>(new List<string> { "Fitness proqramları tapılmadı." });
             }
 
-            // DTO-ya çevirmə
-            var fitnessProgramDtos = fitnessPrograms
-                .Where(p => !p.IsDeleted)
-                .Select(p => new FitnessProgramDto
+            var fitnessProgramDtos = new List<FitnessProgramDto>();
+
+            foreach (var program in fitnessPrograms.Where(p => !p.IsDeleted))
+            {
+                var fitnessProgramDto = new FitnessProgramDto
                 {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                    VideoUrl = p.VideoUrl,
-                    Level = p.Level,
-                    DurationInWeeks = p.DurationInWeeks,
-                    Price = p.Price,
-                    Gender = p.Gender,
+                    Id = program.Id,
+                    Name = program.Name,
+                    Description = program.Description,
+                    VideoUrl = program.VideoUrl,
+                    Level = program.Level,
+                    DurationInWeeks = program.DurationInWeeks,
+                    Price = program.Price,
+                    Gender = program.Gender,
+                    Recipes = new List<RecipeDto>()
+                };
 
-                })
-                .ToList();
+                var recipes = await _unitOfWork.FitnessProgramRecipeRepository
+                    .GetRecipesByFitnessProgramIdAsync(program.Id);
 
-            return new Result<List<FitnessProgramDto>> { Data = fitnessProgramDtos, Errors = [], IsSuccess = true };
+                foreach (var recipe in recipes)
+                {
+                    fitnessProgramDto.Recipes.Add(new RecipeDto
+                    {
+                        Id = recipe.Id,
+                        Name = recipe.Name,
+                        Description = recipe.Description,
+                        Ingredients = recipe.Ingredients,
+                        Instructions = recipe.Instructions,
+                        ImageUrl = recipe.ImageUrl,
+                        Calories = recipe.Calories,
+                        MealType = recipe.MealType
+                    });
+                }
+
+                fitnessProgramDtos.Add(fitnessProgramDto);
+            }
+
+            return new Result<List<FitnessProgramDto>> { Data = fitnessProgramDtos, IsSuccess = true };
         }
     }
 }

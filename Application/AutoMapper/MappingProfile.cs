@@ -15,6 +15,7 @@ using static Application.CQRS.Favorites.Handlers.AddFavorite;
 using Application.CQRS.Favorites.ResponseDto;
 using Application.CQRS.Recipes.ResponseDto;
 using Application.CQRS.FitnessPrograms.ResponseDto;
+using Application.CQRS.FitnessProgramRecipes.ResponseDto;
 
 
 namespace Application.AutoMapper;
@@ -50,6 +51,11 @@ public class MappingProfile : Profile
         CreateMap<Recipe, RecipeDto>();
         CreateMap<FitnessProgram, FitnessProgramDto>();
         CreateMap<FitnessProgramDto, FitnessProgram>();
+        CreateMap<Recipe, FitnessProgramRecipeResponseDto>();
+        CreateMap<Recipe, FitnessProgramRecipeResponseDto>()
+            .ForMember(dest => dest.RecipeId, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.RecipeName, opt => opt.MapFrom(src => src.Name));
+
 
     }
 }

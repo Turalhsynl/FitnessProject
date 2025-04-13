@@ -16,5 +16,5 @@ public class Recipe : BaseEntity
 
     public string MealType { get; set; }
 
-    //public ICollection<FitnessProgramRecipe> FitnessProgramRecipes { get; set; }
+    public ICollection<FitnessProgramRecipe> FitnessProgramRecipes { get; set; }
 }

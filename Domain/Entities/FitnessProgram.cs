@@ -1,4 +1,5 @@
 ﻿using Domain.BaseEntities;
+using Domain.Entities;
 
 public class FitnessProgram : BaseEntity
 {
@@ -10,5 +11,5 @@ public class FitnessProgram : BaseEntity
     public decimal Price { get; set; }
     public string VideoUrl { get; set; }
 
-    //public ICollection<FitnessProgramRecipe> FitnessProgramRecipes { get; set; }
+    public ICollection<FitnessProgramRecipe> FitnessProgramRecipes { get; set; }
 }

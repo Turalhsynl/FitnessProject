@@ -17,10 +17,9 @@ public class SqlUnitOfWork(string connectionString, AppDbContext context) : IUni
     public SqlCartRepository _cartRepository;
     public SqlCartLineRepository _cartLineRepository;
     public SqlFavoriteRepository _favoriteRepository;
-
     public SqlRecipeRepository _recipeRepository;
-
     public SqlFitnessProgramRepository _fitnessProgramRepository;
+    public SqlFitnessProgramRecipeRepository _fitnessProgramRecipeRepository;
 
 
     public IUserRepository UserRepository => _userRepository ?? new SqlUserRepository(_context);
@@ -29,11 +28,10 @@ public class SqlUnitOfWork(string connectionString, AppDbContext context) : IUni
     public ICategoryRepository CategoryRepository => _categoryRepository ?? new SqlCategoryRepository(_context);
     public ICartRepository CartRepository => _cartRepository ??= new SqlCartRepository(_context);
     public ICartLineRepository CartLineRepository => _cartLineRepository ??= new SqlCartLineRepository(_context);
-
     public IFavoriteRepository FavoriteRepository => _favoriteRepository ??= new SqlFavoriteRepository(_context);
     public IFitnessProgramRepository FitnessProgramRepository => _fitnessProgramRepository ??= new SqlFitnessProgramRepository(_context);
-
     public IRecipeRepository RecipeRepository => _recipeRepository ??= new SqlRecipeRepository(_context);
+    public IFitnessProgramRecipeRepository FitnessProgramRecipeRepository => _fitnessProgramRecipeRepository ??= new SqlFitnessProgramRecipeRepository(_context);
 
     public async Task<int> SaveChangeAsync()
     {

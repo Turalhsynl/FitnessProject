@@ -1,4 +1,6 @@
-﻿namespace Application.CQRS.FitnessPrograms.ResponseDto;
+﻿using Application.CQRS.Recipes.ResponseDto;
+
+namespace Application.CQRS.FitnessPrograms.ResponseDto;
 
 public class FitnessProgramDto
 {
@@ -10,4 +12,5 @@ public class FitnessProgramDto
     public string Gender { get; set; }
     public decimal Price { get; set; }
     public string VideoUrl { get; set; }
+    public List<RecipeDto> Recipes { get; set; }
 }
