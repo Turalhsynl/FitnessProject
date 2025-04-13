@@ -11,5 +11,6 @@ public interface IUnitOfWork
     public ICartRepository CartRepository { get; }
     public ICartLineRepository CartLineRepository { get; }
     public IFavoriteRepository FavoriteRepository { get; }
+    public IFitnessProgramRepository FitnessProgramRepository { get; }
     Task<int> SaveChangeAsync();
 }
