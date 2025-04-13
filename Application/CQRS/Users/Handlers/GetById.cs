@@ -32,7 +32,10 @@ public class GetById
                 Lastname = currentUser.Lastname,
                 Gender = currentUser.Gender,
                 Age = currentUser.Age,
-                Email = currentUser.Email
+                Email = currentUser.Email,
+                Height = currentUser.Height,
+                Weight = currentUser.Weight
+                
             };
 
             return new Result<GetByIdDto>() { Data = response, Errors = [], IsSuccess = true };

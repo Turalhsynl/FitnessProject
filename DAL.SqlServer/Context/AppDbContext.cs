@@ -16,5 +16,9 @@ public class AppDbContext : DbContext
     public DbSet<Cart> Carts { get; set; }
     public DbSet<CartLine> CartLines { get; set; }
     public DbSet<Favorite> Favorites { get; set; }
+
     public DbSet<Recipe> Recipes { get; set; }
+
+    public DbSet<FitnessProgram> FitnessPrograms { get; set; }
+
 }
