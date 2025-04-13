@@ -13,7 +13,9 @@ using System.Drawing;
 using Application.CQRS.Favorites.Handlers;
 using static Application.CQRS.Favorites.Handlers.AddFavorite;
 using Application.CQRS.Favorites.ResponseDto;
+using Application.CQRS.Recipes.ResponseDto;
 using Application.CQRS.FitnessPrograms.ResponseDto;
+
 
 namespace Application.AutoMapper;
 
@@ -45,8 +47,9 @@ public class MappingProfile : Profile
         CreateMap<Favorite, RemoveFavorite>();
         CreateMap<Favorite, FavoriteDto>();
         CreateMap<AddFavoriteCommand, Favorite>();
-
+        CreateMap<Recipe, RecipeDto>();
         CreateMap<FitnessProgram, FitnessProgramDto>();
         CreateMap<FitnessProgramDto, FitnessProgram>();
+
     }
 }
