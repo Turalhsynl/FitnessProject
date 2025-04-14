@@ -23,7 +23,10 @@ public class GetAll
 
         public async Task<Result<List<GetAllDto>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-            var users = _unitOfWork.UserRepository.GetAll();
+            var users = _unitOfWork.UserRepository.GetAll()
+                        .Where(u => !u.IsDeleted)
+                        .ToList();
+
             if (users == null || !users.Any())
                 return new Result<List<GetAllDto>>
                 {
