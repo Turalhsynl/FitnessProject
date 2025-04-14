@@ -1,4 +1,6 @@
-﻿namespace Application.CQRS.Users.ResponseDto;
+﻿using Domain.Enums;
+
+namespace Application.CQRS.Users.ResponseDto;
 
 public class GetAllDto
 {
@@ -10,4 +12,6 @@ public class GetAllDto
     public string Email { get; set; }
     public decimal Height { get; set; }
     public decimal Weight { get; set; }
+    public UserRoles UserRole { get; set; }
+
 }

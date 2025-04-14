@@ -2,6 +2,7 @@
 using AutoMapper;
 using Common.GlobalResponses.Generics;
 using Common.Security;
+using Domain.Enums;
 using MediatR;
 using Repository.Common;
 using System.Security;
@@ -21,6 +22,8 @@ public class Update
         public string Password { get; set; }
         public Decimal Height { get; set; }
         public Decimal Weight { get; set; }
+        public UserRoles UserRole { get; set; }
+
     }
 
     public sealed class Handler : IRequestHandler<UpdateCommand, Result<UpdateDto>>
@@ -49,6 +52,7 @@ public class Update
             currentUser.Password = hashPassword;
             currentUser.Weight = request.Weight;
             currentUser.Height = request.Height;
+            currentUser.UserRole = request.UserRole;
             currentUser.UpdatedBy = 1;
 
             _unitOfWork.UserRepository.Update(currentUser);
