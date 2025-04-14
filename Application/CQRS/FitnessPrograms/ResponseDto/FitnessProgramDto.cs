@@ -12,5 +12,6 @@ public class FitnessProgramDto
     public string Gender { get; set; }
     public decimal Price { get; set; }
     public string VideoUrl { get; set; }
+    public string ImageUrl { get; set; }
     public List<RecipeDto> Recipes { get; set; }
 }

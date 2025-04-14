@@ -30,10 +30,8 @@ public class GetFitnessProgramById
                 };
             }
 
-            // Reseptləri gətir
             var recipes = await _unitOfWork.FitnessProgramRecipeRepository.GetRecipesByFitnessProgramIdAsync(program.Id);
 
-            // Reseptləri RecipeDto-ya map edək
             var recipeDtos = recipes.Select(r => new RecipeDto
             {
                 Id = r.Id,
@@ -46,7 +44,6 @@ public class GetFitnessProgramById
                 MealType = r.MealType
             }).ToList();
 
-            // DTO-nu doldur
             var fitnessProgramDto = new FitnessProgramDto
             {
                 Id = program.Id,
@@ -57,7 +54,8 @@ public class GetFitnessProgramById
                 Gender = program.Gender,
                 Price = program.Price,
                 VideoUrl = program.VideoUrl,
-                Recipes = recipeDtos // Əlavə etdik
+                ImageUrl = program.ImageUrl,
+                Recipes = recipeDtos
             };
 
             return new Result<FitnessProgramDto>
