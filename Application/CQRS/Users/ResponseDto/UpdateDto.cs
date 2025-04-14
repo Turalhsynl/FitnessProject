@@ -1,4 +1,6 @@
-﻿namespace Application.CQRS.Users.ResponseDto;
+﻿using Domain.Enums;
+
+namespace Application.CQRS.Users.ResponseDto;
 
 public class UpdateDto
 {
@@ -8,4 +10,5 @@ public class UpdateDto
     public string Gender { get; set; }
     public int Age { get; set; }
     public string Email { get; set; }
+    public UserRoles UserRole { get; set; }
 }
