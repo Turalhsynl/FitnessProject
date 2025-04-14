@@ -27,7 +27,9 @@ namespace Application.CQRS.Categories.Handlers
         public async Task<Result<List<GetAllCategoryDto>>> Handle(GetAllCategoryQuery request, CancellationToken cancellationToken)
         {
             var categories = await _unitOfWork.CategoryRepository
+               
                 .GetAll()
+                 .Where(x => !x.IsDeleted)
                 .Include(c => c.Products)
                 .ToListAsync();
 
