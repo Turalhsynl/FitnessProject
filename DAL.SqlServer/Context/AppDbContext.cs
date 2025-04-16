@@ -21,5 +21,7 @@ public class AppDbContext : DbContext
 
     public DbSet<FitnessProgram> FitnessPrograms { get; set; }
     public DbSet<FitnessProgramRecipe> FitnessProgramRecipes { get; set; }
+    public DbSet<UserProgram> UserPrograms { get; set; }
+    public DbSet<MembershipPlan> MembershipPlans { get; set; }
 
 }

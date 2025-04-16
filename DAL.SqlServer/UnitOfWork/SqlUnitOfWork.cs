@@ -20,7 +20,8 @@ public class SqlUnitOfWork(string connectionString, AppDbContext context) : IUni
     public SqlRecipeRepository _recipeRepository;
     public SqlFitnessProgramRepository _fitnessProgramRepository;
     public SqlFitnessProgramRecipeRepository _fitnessProgramRecipeRepository;
-
+    public SqlUserProgramRepository _userProgramRepository;
+    public SqlMembershipPlanRepository _membershipPlanRepository;
 
     public IUserRepository UserRepository => _userRepository ?? new SqlUserRepository(_context);
     public IRefreshTokenRepository RefreshTokenRepository => _refreshTokenRepository ?? new SqlRefreshTokenRepository(_context);
@@ -32,6 +33,10 @@ public class SqlUnitOfWork(string connectionString, AppDbContext context) : IUni
     public IFitnessProgramRepository FitnessProgramRepository => _fitnessProgramRepository ??= new SqlFitnessProgramRepository(_context);
     public IRecipeRepository RecipeRepository => _recipeRepository ??= new SqlRecipeRepository(_context);
     public IFitnessProgramRecipeRepository FitnessProgramRecipeRepository => _fitnessProgramRecipeRepository ??= new SqlFitnessProgramRecipeRepository(_context);
+
+    public IUserProgramRepository UserProgramRepository => _userProgramRepository ??= new SqlUserProgramRepository(_context);
+
+    public IMembershipPlanRepository MembershipPlanRepository => _membershipPlanRepository ??= new SqlMembershipPlanRepository(_context);
 
     public async Task<int> SaveChangeAsync()
     {
