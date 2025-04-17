@@ -10,7 +10,6 @@ public class MembershipPlanController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
-    // 🔍 GET by ID
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -18,7 +17,6 @@ public class MembershipPlanController(ISender sender) : ControllerBase
         return result.IsSuccess ? Ok(result) : NotFound(result);
     }
 
-    // 📄 GET all
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -26,7 +24,6 @@ public class MembershipPlanController(ISender sender) : ControllerBase
         return Ok(result);
     }
 
-    // ➕ CREATE
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateMembershipPlan.CreateMembershipPlanCommand command)
     {
@@ -34,7 +31,6 @@ public class MembershipPlanController(ISender sender) : ControllerBase
         return result.IsSuccess ? Ok(result) : BadRequest(result);
     }
 
-    // 🔄 UPDATE
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateMembershipPlan.UpdateMembershipPlanCommand command)
     {
@@ -45,7 +41,6 @@ public class MembershipPlanController(ISender sender) : ControllerBase
         return result.IsSuccess ? Ok(result) : NotFound(result);
     }
 
-    // 🗑 DELETE (soft delete)
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -53,7 +48,6 @@ public class MembershipPlanController(ISender sender) : ControllerBase
         return result.IsSuccess ? Ok(result) : NotFound(result);
     }
 
-    // ❓ EXISTS check
     [HttpGet("exists/{id}")]
     public async Task<IActionResult> Exists(int id)
     {
