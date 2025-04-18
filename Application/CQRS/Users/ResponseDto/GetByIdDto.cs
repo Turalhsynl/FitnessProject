@@ -8,6 +8,7 @@ public class GetByIdDto
     public string Gender { get; set; }
     public int Age { get; set; }
     public string Email { get; set; }
+    public string Password { get; set; }
     public Decimal Height { get; set; }
     public Decimal Weight { get; set; }
 }

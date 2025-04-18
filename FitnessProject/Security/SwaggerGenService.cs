@@ -17,6 +17,7 @@ public static class SwaggerGenService
                 BearerFormat = "JWT",
                 Scheme = "Bearer"
             });
+
             option.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
@@ -31,6 +32,8 @@ public static class SwaggerGenService
                     new string[]{}
                 }
             });
+
+            option.OperationFilter<FileUploadOperationFilter>();
         });
 
         return services;

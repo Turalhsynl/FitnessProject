@@ -18,6 +18,7 @@ public interface IUnitOfWork
     public IFitnessProgramRecipeRepository FitnessProgramRecipeRepository { get; }
     public IUserProgramRepository UserProgramRepository { get; }
     public IMembershipPlanRepository MembershipPlanRepository { get; }
+    public IFileUploadRepository FileUploadRepository { get; }
 
     Task<int> SaveChangeAsync();
 }

@@ -1,5 +1,7 @@
 ﻿using Application;
+using Application.Abstractions;
 using Application.Security;
+using Application.Services;
 using DAL.SqlServer;
 using DAL.SqlServer.Context;
 using DAL.SqlServer.Infastructure;
@@ -37,9 +39,12 @@ builder.Services.AddSqlServices(conn!);
 builder.Services.AddApplicationServices();
 builder.Services.AddSwaggerService();
 builder.Services.AddAuthenticationService(builder.Configuration);
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddScoped<IProductRepository, SqlProductRepository>();
+builder.Services.AddScoped<IFileUploadRepository, SqlFileUploadRepository>(); // Əlavə etdik
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 builder.Services.AddMediatR(typeof(Program));
 
 var app = builder.Build();

@@ -33,6 +33,7 @@ public class GetById
                 Gender = currentUser.Gender,
                 Age = currentUser.Age,
                 Email = currentUser.Email,
+                Password = currentUser.Password,
                 Height = currentUser.Height,
                 Weight = currentUser.Weight
                 

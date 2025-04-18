@@ -23,5 +23,7 @@ public class AppDbContext : DbContext
     public DbSet<FitnessProgramRecipe> FitnessProgramRecipes { get; set; }
     public DbSet<UserProgram> UserPrograms { get; set; }
     public DbSet<MembershipPlan> MembershipPlans { get; set; }
+    public DbSet<Domain.Entities.File> Files { get; set; }
+
 
 }
