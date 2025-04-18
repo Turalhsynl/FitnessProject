@@ -13,5 +13,7 @@ public class Product:BaseEntity
     public ProductColors Color { get; set; }
     public int CategoryId { get; set; }
     public Category Category { get; set; }
+    public int? ImageId { get; set; }
+    public File? Image { get; set; }
 
 }

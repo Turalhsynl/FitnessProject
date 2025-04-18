@@ -46,6 +46,7 @@ builder.Services.AddScoped<IProductRepository, SqlProductRepository>();
 builder.Services.AddScoped<IFileUploadRepository, SqlFileUploadRepository>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddMediatR(typeof(Program));
 
 var app = builder.Build();
