@@ -19,6 +19,7 @@ using Application.CQRS.FitnessProgramRecipes.ResponseDto;
 using Application.CQRS.UserProgram.ResponseDto;
 using Application.CQRS.MembershipPlans.Handlers;
 using Application.CQRS.MembershipPlans.ResponseDto;
+using Application.CQRS.Orders.ResponseDto;
 
 
 namespace Application.AutoMapper;
@@ -66,6 +67,12 @@ public class MappingProfile : Profile
         CreateMap<UpdateMembershipPlan.UpdateMembershipPlanCommand, MembershipPlan>();
 
         CreateMap<MembershipPlan, MembershipPlanDto>();
+        CreateMap<Order, OrderDto>()
+           .ForMember(dest => dest.OrderLines, opt => opt.MapFrom(src => src.OrderLines));
+        CreateMap<OrderLine, OrderLineDto>()
+    .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+    .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.UnitPrice));
+
 
     }
 }

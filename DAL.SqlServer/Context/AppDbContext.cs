@@ -25,5 +25,8 @@ public class AppDbContext : DbContext
     public DbSet<MembershipPlan> MembershipPlans { get; set; }
     public DbSet<Domain.Entities.File> Files { get; set; }
 
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderLine> OrdersLines { get; set;}
+
 
 }
