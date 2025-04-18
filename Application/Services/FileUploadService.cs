@@ -50,7 +50,7 @@ public class FileUploadService : IFileUploadService
         await _unitOfWork.FileUploadRepository.AddAsync(fileEntity);
         await _unitOfWork.SaveChangeAsync();
 
-        return fileName;
+        return fileEntity.Id.ToString();
     }
 
     public async Task<Domain.Entities.File> GetByIdAsync(int id)

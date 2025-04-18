@@ -18,5 +18,7 @@ public class User : BaseEntity
     public int? MembershipPlanId { get; set; }
     public MembershipPlan MembershipPlan { get; set; }
     public ICollection<UserProgram> PurchasedProqrams { get; set; }
+    public int? ProfileImageId { get; set; }
+    public File? ProfileImage { get; set; }
 
 }

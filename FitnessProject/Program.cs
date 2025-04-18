@@ -43,8 +43,9 @@ builder.Services.AddAuthenticationService(builder.Configuration);
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddScoped<IProductRepository, SqlProductRepository>();
-builder.Services.AddScoped<IFileUploadRepository, SqlFileUploadRepository>(); // Əlavə etdik
+builder.Services.AddScoped<IFileUploadRepository, SqlFileUploadRepository>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddMediatR(typeof(Program));
 
 var app = builder.Build();
