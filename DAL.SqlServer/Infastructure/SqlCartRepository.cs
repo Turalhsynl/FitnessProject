@@ -48,7 +48,11 @@ public class SqlCartRepository(AppDbContext context) : ICartRepository
 
     public async Task<Cart> GetCartByUserIdAsync(int userId)
     {
-        return await _context.Carts.FirstOrDefaultAsync(cart => cart.UserId == userId && !cart.IsDeleted);
+        return await _context.Carts
+            .Include(c => c.CartLines)
+            .ThenInclude(cl => cl.Product) // Əgər Product lazım deyilsə, bu sətri silə bilərsən
+            .FirstOrDefaultAsync(cart => cart.UserId == userId && !cart.IsDeleted);
     }
+
 
 }

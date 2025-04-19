@@ -24,7 +24,7 @@ public class CreateOrder
         public async Task<Result<bool>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
             var cart = await _unitOfWork.CartRepository.GetCartByUserIdAsync(request.UserId);
-            if (cart == null || cart.CartLines == null || !cart.CartLines.Any())
+            if (cart == null || !cart.CartLines.Any())
             {
                 return new Result<bool>
                 {
@@ -39,7 +39,7 @@ public class CreateOrder
                 TotalPrice = cart.CartLines.Sum(x => x.Product.Price * x.Quantity),
                 OrderLines = cart.CartLines.Select(x => new OrderLine
                 {
-                    ProductId = x.ProductId,
+                    //ProductId = x.ProductId,
                     Quantity = x.Quantity,
                     UnitPrice = x.Product.Price
                 }).ToList()
