@@ -15,7 +15,7 @@ public class AddChatMessage
         public string Message { get; set; }
     }
 
-    public sealed class Handler(IUnitOfWork unitOfWork, IMapper mapper, IUserContext userContext)
+    public sealed class AddChatHandler(IUnitOfWork unitOfWork, IMapper mapper, IUserContext userContext)
         : IRequestHandler<AddChatMessageCommand, Result<string>>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;

@@ -5,6 +5,7 @@ using Application.Services;
 using DAL.SqlServer;
 using DAL.SqlServer.Context;
 using DAL.SqlServer.Infastructure;
+using FitnessProject.API.Hubs;
 using FitnessProject.API.Infrastructure;
 using FitnessProject.API.Infrastructure.Middlewares;
 using FitnessProject.API.Security;
@@ -49,6 +50,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<StripeService>();
 builder.Services.AddMediatR(typeof(Program));
+builder.Services.AddSignalR();
+
 
 var app = builder.Build();
 
@@ -63,7 +66,7 @@ app.UseHttpsRedirection();
 app.UseCors("AllowSpecificOrigins");
 
 app.UseAuthorization();
-
+app.MapHub<ChatHub>("/chathub");
 
 app.MapControllers();
 

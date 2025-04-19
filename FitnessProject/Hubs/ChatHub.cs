@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Application.CQRS.chat_messages.Handlers;
+using Application.Security;
+using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
 using static Application.CQRS.chat_messages.Handlers.SaveChatMessage;
 
@@ -6,45 +9,40 @@ namespace FitnessProject.API.Hubs;
 
 public class ChatHub : Hub
 {
-    private readonly SaveChatMessageHandler _handler;
-    private static readonly ConcurrentDictionary<string, int> _connections = new();
+    private readonly ISender _sender;
+    private readonly IUserContext _userContext;
 
-    public ChatHub(SaveChatMessageHandler handler)
+    public ChatHub(ISender sender, IUserContext userContext)
     {
-        _handler = handler;
+        _sender = sender;
+        _userContext = userContext;
     }
 
-    public override Task OnConnectedAsync()
+    public async Task SendMessage(int receiverId, string message)
     {
-        var userIdString = Context.GetHttpContext().Request.Query["userId"];
-        if (int.TryParse(userIdString, out int userId))
+        var senderId = _userContext.MustGetUserId();
+
+        var command = new AddChatMessage.AddChatMessageCommand
         {
-            _connections[Context.ConnectionId] = userId;
-        }
-        return base.OnConnectedAsync();
-    }
-
-    public override Task OnDisconnectedAsync(Exception exception)
-    {
-        _connections.TryRemove(Context.ConnectionId, out _);
-        return base.OnDisconnectedAsync(exception);
-    }
-
-    public async Task SendPrivateMessage(int senderId, int receiverId, string message)
-    {
-        _handler.Handle(new SaveChatMessageCommand
-        {
-            SenderId = senderId,
             ReceiverId = receiverId,
             Message = message
-        });
+        };
 
-        var connectionId = _connections.FirstOrDefault(x => x.Value == receiverId).Key;
+        var result = await _sender.Send(command);
 
-        if (connectionId != null)
+        if (result.IsSuccess)
         {
-            await Clients.Client(connectionId).SendAsync("ReceiveMessage", senderId, message);
-            await Clients.Caller.SendAsync("ReceiveMessage", senderId, message);
+            await Clients.User(receiverId.ToString()).SendAsync("ReceiveMessage", new
+            {
+
+                SenderId = senderId,
+                Message = message,
+                SentAt = DateTime.UtcNow
+            });
+        }
+        else
+        {
+            Console.WriteLine("Mesaj gönderilemedi.");
         }
     }
 }
