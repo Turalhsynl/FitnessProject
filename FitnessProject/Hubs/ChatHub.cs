@@ -1,8 +1,8 @@
 ﻿using Application.CQRS.chat_messages.Handlers;
-using Application.Security;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
+using System.Security.Claims;
 using static Application.CQRS.chat_messages.Handlers.SaveChatMessage;
 
 namespace FitnessProject.API.Hubs;
@@ -10,17 +10,47 @@ namespace FitnessProject.API.Hubs;
 public class ChatHub : Hub
 {
     private readonly ISender _sender;
-    private readonly IUserContext _userContext;
 
-    public ChatHub(ISender sender, IUserContext userContext)
+    private static readonly ConcurrentDictionary<string, string> _connections = new();
+
+    public ChatHub(ISender sender)
     {
         _sender = sender;
-        _userContext = userContext;
+    }
+
+    public override Task OnConnectedAsync()
+    {
+        var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            throw new HubException("User must login.");
+        }
+
+        _connections.TryAdd(userId, Context.ConnectionId);
+        return base.OnConnectedAsync();
+    }
+
+    public override Task OnDisconnectedAsync(Exception? exception)
+    {
+        var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (!string.IsNullOrEmpty(userId))
+        {
+            _connections.TryRemove(userId, out _);
+        }
+
+        return base.OnDisconnectedAsync(exception);
     }
 
     public async Task SendMessage(int receiverId, string message)
     {
-        var senderId = _userContext.MustGetUserId();
+        var senderIdStr = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (!int.TryParse(senderIdStr, out var senderId))
+        {
+            throw new HubException("Invalid sender");
+        }
 
         var command = new AddChatMessage.AddChatMessageCommand
         {
@@ -32,17 +62,23 @@ public class ChatHub : Hub
 
         if (result.IsSuccess)
         {
-            await Clients.User(receiverId.ToString()).SendAsync("ReceiveMessage", new
+            if (_connections.TryGetValue(receiverId.ToString(), out var receiverConnectionId))
             {
-
-                SenderId = senderId,
-                Message = message,
-                SentAt = DateTime.UtcNow
-            });
+                await Clients.Client(receiverConnectionId).SendAsync("ReceiveMessage", new
+                {
+                    SenderId = senderId,
+                    Message = message,
+                    SentAt = DateTime.UtcNow
+                });
+            }
+            else
+            {
+                Console.WriteLine("Receiver is not connected.");
+            }
         }
         else
         {
-            Console.WriteLine("Mesaj gönderilemedi.");
+            Console.WriteLine("Message could not be sent.");
         }
     }
 }

@@ -10,6 +10,7 @@ using FitnessProject.API.Infrastructure;
 using FitnessProject.API.Infrastructure.Middlewares;
 using FitnessProject.API.Security;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Repository.Repositories;
@@ -51,6 +52,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<StripeService>();
 builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddSignalR();
+
 
 
 var app = builder.Build();
