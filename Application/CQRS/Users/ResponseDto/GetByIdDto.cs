@@ -11,4 +11,6 @@ public class GetByIdDto
     public string Password { get; set; }
     public Decimal Height { get; set; }
     public Decimal Weight { get; set; }
+    public int? ProfileImageId { get; set; }
+
 }

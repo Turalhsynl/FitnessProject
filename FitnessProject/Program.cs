@@ -65,6 +65,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles(); // Bu mütləq olmalıdır
+
 app.UseCors("AllowSpecificOrigins");
 
 app.UseAuthorization();

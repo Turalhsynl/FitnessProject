@@ -38,7 +38,7 @@ public class ProductService : IProductService
         await _unitOfWork.FileUploadRepository.AddAsync(file);
         await _unitOfWork.SaveChangeAsync();
 
-        product.ImageId = file.Id;
+        product.ImageId = file.Id - 1;
         await _unitOfWork.SaveChangeAsync();
 
         return fileName;

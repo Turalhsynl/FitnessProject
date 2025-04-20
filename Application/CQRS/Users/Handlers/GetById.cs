@@ -35,7 +35,8 @@ public class GetById
                 Email = currentUser.Email,
                 Password = currentUser.Password,
                 Height = currentUser.Height,
-                Weight = currentUser.Weight
+                Weight = currentUser.Weight,
+                ProfileImageId = currentUser.ProfileImageId
                 
             };
 

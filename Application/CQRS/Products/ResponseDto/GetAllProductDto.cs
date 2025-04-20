@@ -12,4 +12,6 @@ public class GetAllProductDto
     public string ImageUrl { get; set; }
     public string Color { get; set; }
     public int CategoryId { get; set; }
+    public int ImageId { get; set; }
+
 }

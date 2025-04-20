@@ -22,14 +22,26 @@ public class FileController(IFileUploadService fileUploadService) : ControllerBa
         return Ok(new { IsSuccess = true, FileName = fileName });
     }
 
-
-
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var file = await _fileUploadService.GetByIdAsync(id);
-        return file is null ? NotFound() : Ok(file);
+        if (file == null)
+            return NotFound();
+
+        // Faylın serverdəki tam yolu
+        var filePath = file.FilePath;
+
+        // Faylın serverdəki yerini "uploads" ilə əlaqələndiririk
+        var relativePath = filePath.Substring(filePath.IndexOf("uploads"));
+
+        // Faylın müştəriyə təqdim ediləcək URL-ni yaratmaq
+        var fileUrl = $"https://localhost:7298/{relativePath.Replace("\\", "/")}"; // \\-ı / ilə əvəz edirik
+
+        return Ok(new { url = fileUrl });
     }
+
+
 
     [HttpGet("by-name/{name}")]
     public async Task<IActionResult> GetByName(string name)

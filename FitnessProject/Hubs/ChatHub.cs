@@ -62,23 +62,30 @@ public class ChatHub : Hub
 
         if (result.IsSuccess)
         {
+            var messageDto = new
+            {
+                SenderId = senderId,
+                Message = message,
+                SentAt = DateTime.UtcNow
+            };
+
+            // Qarşı tərəfə göndər
             if (_connections.TryGetValue(receiverId.ToString(), out var receiverConnectionId))
             {
-                await Clients.Client(receiverConnectionId).SendAsync("ReceiveMessage", new
-                {
-                    SenderId = senderId,
-                    Message = message,
-                    SentAt = DateTime.UtcNow
-                });
+                await Clients.Client(receiverConnectionId).SendAsync("ReceiveMessage", messageDto);
             }
             else
             {
                 Console.WriteLine("Receiver is not connected.");
             }
+
+            // Göndərən tərəfə də göndər (sənin problemi həll edən hissə)
+            await Clients.Caller.SendAsync("ReceiveMessage", messageDto);
         }
         else
         {
             Console.WriteLine("Message could not be sent.");
         }
     }
+
 }

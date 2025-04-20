@@ -47,7 +47,7 @@ public class UserService : IUserService
             throw new Exception("İstifadəçi tapılmadı.");
 
         // Profil şəkilinin ID-sini istifadəçi profilinə əlavə edirik
-        user.ProfileImageId = fileEntity.Id;  // Burada artıq şəkilin ID-sini istifadə edirik
+        user.ProfileImageId = fileEntity.Id - 1;  // Burada artıq şəkilin ID-sini istifadə edirik
         _unitOfWork.UserRepository.Update(user);
         await _unitOfWork.SaveChangeAsync();
 
