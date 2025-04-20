@@ -64,4 +64,14 @@ public class UserController(ISender sender) : ControllerBase
     {
         return Ok(await _sender.Send(request));
     }
+
+    [HttpPut("update-password")]
+    public async Task<IActionResult> UpdatePassword([FromBody] UpdatePassword.UpdatePasswordCommand command)
+    {
+        var result = await _sender.Send(command);
+        if (!result.IsSuccess)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
 }

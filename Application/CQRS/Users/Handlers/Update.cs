@@ -19,7 +19,6 @@ public class Update
         public string Gender { get; set; }
         public int Age { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
         public Decimal Height { get; set; }
         public Decimal Weight { get; set; }
         public UserRoles UserRole { get; set; }
@@ -42,14 +41,12 @@ public class Update
             var currentUser = await _unitOfWork.UserRepository.GetByIdAsync(request.Id);
             if (currentUser == null) throw new Exception("User not found");
 
-            var hashPassword = PasswordHasher.ComputeStringToSha256Hash(request.Password);
 
             currentUser.Firstname = request.Firstname;
             currentUser.Lastname = request.Lastname;
             currentUser.Gender = request.Gender;
             currentUser.Age = request.Age;
             currentUser.Email = request.Email;
-            currentUser.Password = hashPassword;
             currentUser.Weight = request.Weight;
             currentUser.Height = request.Height;
             currentUser.UserRole = request.UserRole;

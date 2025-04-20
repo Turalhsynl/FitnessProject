@@ -16,4 +16,10 @@ public static class PasswordHasher
         }
         return stringBuilder.ToString();
     }
+
+    public static bool VerifyPassword(string plainTextPassword, string hashedPassword)
+    {
+        var computedHash = ComputeStringToSha256Hash(plainTextPassword);
+        return computedHash.Equals(hashedPassword, StringComparison.OrdinalIgnoreCase);
+    }
 }
