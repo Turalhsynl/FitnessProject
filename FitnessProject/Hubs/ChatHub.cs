@@ -6,6 +6,7 @@ using System.Security.Claims;
 using static Application.CQRS.chat_messages.Handlers.SaveChatMessage;
 
 namespace FitnessProject.API.Hubs;
+
 public class ChatHub : Hub
 {
     private readonly ISender _sender;
@@ -70,6 +71,13 @@ public class ChatHub : Hub
 
             if (_connections.TryGetValue(receiverId.ToString(), out var receiverConnectionId))
             {
+                await Clients.Client(receiverConnectionId).SendAsync("ReceiveMessage", new
+                {
+                    SenderId = senderId,
+                    Message = message,
+                    SentAt = DateTime.UtcNow
+                });
+
                 await Clients.Client(receiverConnectionId).SendAsync("ReceiveMessage", messageDto);
             }
             else
@@ -84,5 +92,5 @@ public class ChatHub : Hub
             Console.WriteLine("Message could not be sent.");
         }
     }
-
 }
+ 
