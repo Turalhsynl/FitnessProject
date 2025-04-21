@@ -26,7 +26,7 @@ public class AppDbContext : DbContext
     public DbSet<Domain.Entities.File> Files { get; set; }
 
     public DbSet<Order> Orders { get; set; }
-    public DbSet<OrderLine> OrdersLines { get; set;}
+    public DbSet<OrderLine> OrderLines { get; set;}
     public DbSet<ChatMessage> ChatMessages { get; set; }
 
 

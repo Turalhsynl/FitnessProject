@@ -20,6 +20,7 @@ public interface IUnitOfWork
     public IMembershipPlanRepository MembershipPlanRepository { get; }
     public IFileUploadRepository FileUploadRepository { get; }
     public IOrderRepository OrderRepository { get; }
+    public IOrderLineRepository OrderLineRepository { get; }
     public IChatMessageRepository ChatMessageRepository { get; }
     Task<int> SaveChangeAsync();
 }

@@ -25,6 +25,7 @@ public class SqlUnitOfWork(string connectionString, AppDbContext context) : IUni
     public SqlFileUploadRepository _fileUploadRepository;
     public SqlOrderRepository _orderRepository;
     public SqlChatMessageRepository _chatMessageRepository;
+    public SqlOrderLineRepository _orderLineRepository;
 
     public IUserRepository UserRepository => _userRepository ?? new SqlUserRepository(_context);
     public IRefreshTokenRepository RefreshTokenRepository => _refreshTokenRepository ?? new SqlRefreshTokenRepository(_context);
@@ -41,6 +42,7 @@ public class SqlUnitOfWork(string connectionString, AppDbContext context) : IUni
     public IFileUploadRepository FileUploadRepository => _fileUploadRepository ??= new SqlFileUploadRepository(_context);
 
     public IOrderRepository OrderRepository => _orderRepository ??= new SqlOrderRepository(_context);
+    public IOrderLineRepository OrderLineRepository => _orderLineRepository ??= new SqlOrderLineRepository(_context);
 
     public IChatMessageRepository ChatMessageRepository => _chatMessageRepository ??= new SqlChatMessageRepository(_context);
 

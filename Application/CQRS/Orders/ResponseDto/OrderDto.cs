@@ -2,8 +2,10 @@
 
 public class OrderDto
 {
-    public int OrderId { get; set; }
+    public int Id { get; set; }
     public int UserId { get; set; }
-    public decimal TotalPrice { get; set; }
+    public decimal TotalAmount { get; set; }
+    public string Status { get; set; }
+    public DateTime OrderDate { get; set; }
     public List<OrderLineDto> OrderLines { get; set; }
 }

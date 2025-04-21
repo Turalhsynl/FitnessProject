@@ -3,52 +3,62 @@ using AutoMapper;
 using Common.GlobalResponses.Generics;
 using MediatR;
 using Repository.Common;
+using Repository.Repositories;
 
 namespace Application.CQRS.Orders.Handlers;
 
 public class GetOrderById
 {
-    public class GetOrderByIdQuery : IRequest<Result<OrderDto>>
+    public class GetOrderQuery : IRequest<Result<OrderDto>>
     {
         public int OrderId { get; set; }
 
-        public GetOrderByIdQuery(int orderId)
+        public GetOrderQuery(int orderId)
         {
             OrderId = orderId;
         }
     }
 
-    public sealed class GetOrderHandler : IRequestHandler<GetOrderByIdQuery, Result<OrderDto>>
+    public class GetOrderQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetOrderQuery, Result<OrderDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-        public GetOrderHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public async Task<Result<OrderDto>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
-        public async Task<Result<OrderDto>> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
-        {
-            var order = await _unitOfWork.OrderRepository.GetByIdAsync(request.OrderId);
-            if (order == null)
+            try
             {
-                return new Result<OrderDto>
+                var order = await _unitOfWork.OrderRepository.GetOrderByIdAsync(request.OrderId);
+
+                if (order == null)
                 {
-                    IsSuccess = false,
-                    Errors = new List<string> { "Order not found" }
+                    return new Result<OrderDto>(){ Errors = ["Order not found"], Data = null, IsSuccess = false};
+                }
+
+                var orderDTO = new OrderDto
+                {
+                    Id = order.Id,
+                    UserId = order.UserId,
+                    TotalAmount = order.TotalAmount,
+                    Status = order.Status,
+                    OrderLines = order.OrderLines.Select(ol => new OrderLineDto
+                    {
+                        ProductId = ol.ProductId,
+                        Quantity = ol.Quantity,
+                        Price = ol.Price
+                    }).ToList()
+                };
+
+                return new Result<OrderDto>()
+                {
+                    Data = orderDTO,
+                    Errors = [],
+                    IsSuccess = true
                 };
             }
-
-            var response = _mapper.Map<OrderDto>(order);
-            response.OrderLines = _mapper.Map<List<OrderLineDto>>(order.OrderLines);
-
-            return new Result<OrderDto>
+            catch (Exception ex)
             {
-                Data = response,
-                IsSuccess = true
-            };
+                return new Result<OrderDto>() { IsSuccess = false, Errors = [ex.Message], Data = null };
+            }
         }
     }
 }

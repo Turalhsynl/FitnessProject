@@ -1,47 +1,55 @@
 ﻿using Application.CQRS.Orders.Handlers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using static Application.CQRS.Orders.Handlers.CreateOrder;
 using static Application.CQRS.Orders.Handlers.GetOrderById;
+using static Application.CQRS.Orders.Handlers.GetOrderLines;
 
 namespace FitnessProject.API.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
-public class OrderController : ControllerBase
+[Route("api/[controller]")]
+public class OrderController(ISender sender) : ControllerBase
 {
-    private readonly ISender _sender;
+    private readonly ISender _sender = sender;
 
-    public OrderController(ISender sender)
-    {
-        _sender = sender;
-    }
-
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateOrder([FromBody] CreateOrder.CreateOrderCommand command)
+    [HttpPost]
+    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand command)
     {
         var result = await _sender.Send(command);
-        return result.IsSuccess ? Ok(result) : BadRequest(result);
-    }
 
-    [HttpGet("user/{userId}")]
-    public async Task<IActionResult> GetOrdersByUserId(int userId)
-    {
-        var result = await _sender.Send(new GetOrdersByUserId.GetOrdersByUserIdQuery { UserId = userId });
-        return result.IsSuccess ? Ok(result) : NotFound(result);
+        if (result.IsSuccess)
+        {
+            return Ok(result.Data);
+        }
+
+        return BadRequest();
     }
 
     [HttpGet("{orderId}")]
-    public async Task<IActionResult> GetOrderById(int orderId)
+    public async Task<IActionResult> GetOrder(int orderId)
     {
-        var result = await _sender.Send(new GetOrderById.GetOrderByIdQuery(orderId));
-        return result.IsSuccess ? Ok(result) : NotFound(result);
+        var result = await _sender.Send(new GetOrderQuery(orderId));
+
+        if (result.IsSuccess)
+        {
+            return Ok(result.Data);
+        }
+
+        return NotFound();
     }
 
-
-    [HttpDelete("{orderId}")]
-    public async Task<IActionResult> DeleteOrder(int orderId)
+    [HttpGet("{orderId}/orderlines")]
+    public async Task<IActionResult> GetOrderLines(int orderId)
     {
-        var result = await _sender.Send(new DeleteOrder.DeleteOrderCommand { OrderId = orderId });
-        return result.IsSuccess ? Ok(result) : NotFound(result);
+        var result = await _sender.Send(new GetOrderLinesQuery(orderId));
+
+        if (result.IsSuccess)
+        {
+            return Ok(result.Data);
+        }
+
+        return NotFound();
     }
 }
+
