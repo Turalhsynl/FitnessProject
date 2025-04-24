@@ -20,6 +20,7 @@ public class UpdateProduct
         public decimal Price { get; set; }
         public string ImageUrl { get; set; }
         public ProductColors Color { get; set; }
+        public int ImageId { get; set; }
     }
 
     public sealed class Handler : IRequestHandler<UpdateProductCommand, Result<UpdateProductDto>>
@@ -44,6 +45,7 @@ public class UpdateProduct
             currentProduct.Color = request.Color;
             currentProduct.Quantity = request.Quantity;
             currentProduct.ImageUrl = request.ImageUrl;
+            currentProduct.ImageId = request.ImageId;
             currentProduct.UpdatedBy = 1; 
 
             _unitOfWork.ProductRepository.Update(currentProduct);

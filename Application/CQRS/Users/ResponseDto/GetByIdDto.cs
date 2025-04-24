@@ -1,4 +1,6 @@
-﻿namespace Application.CQRS.Users.ResponseDto;
+﻿using Domain.Enums;
+
+namespace Application.CQRS.Users.ResponseDto;
 
 public class GetByIdDto
 {
@@ -12,5 +14,6 @@ public class GetByIdDto
     public Decimal Height { get; set; }
     public Decimal Weight { get; set; }
     public int? ProfileImageId { get; set; }
+    public UserRoles UserRole { get; set; }
 
 }

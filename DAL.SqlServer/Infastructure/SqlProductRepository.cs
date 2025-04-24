@@ -15,7 +15,7 @@ public class SqlProductRepository(AppDbContext context) : IProductRepository
         await _context.Products.AddAsync(product);
         await _context.SaveChangesAsync();
     }
-     //Cart yazilanda olacaq
+    //Cart yazilanda olacaq
     public async Task AddToCartAsync(int productId, int userId, int quantity)
     {
         //var cartItem = new CartItem
@@ -98,15 +98,15 @@ public class SqlProductRepository(AppDbContext context) : IProductRepository
         }
     }
 
-    public async void Update(Product product)
+    public void Update(Product product)
     {
         _context.Products.Update(product);
-        await _context.SaveChangesAsync();
+        _context.SaveChanges();
     }
 
     public async Task<IEnumerable<Product>> SearchProduct(string text)
     {
-        text = text.ToLower(); 
+        text = text.ToLower();
         return await _context.Products
             .Where(x => x.Name.ToLower().Contains(text) || x.Description.ToLower().Contains(text))
             .ToListAsync();

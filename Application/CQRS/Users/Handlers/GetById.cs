@@ -1,5 +1,6 @@
 ﻿using Application.CQRS.Users.ResponseDto;
 using Common.GlobalResponses.Generics;
+using Domain.Enums;
 using MediatR;
 using Repository.Common;
 
@@ -36,8 +37,9 @@ public class GetById
                 Password = currentUser.Password,
                 Height = currentUser.Height,
                 Weight = currentUser.Weight,
-                ProfileImageId = currentUser.ProfileImageId
-                
+                ProfileImageId = currentUser.ProfileImageId,
+                UserRole = currentUser.UserRole,
+
             };
 
             return new Result<GetByIdDto>() { Data = response, Errors = [], IsSuccess = true };

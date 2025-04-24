@@ -12,4 +12,5 @@ public class UpdateProductDto
     public string ImageUrl { get; set; }
     public ProductColors Color { get; set; }
     public int CategoryId { get; set; }
+    public int ImageId { get; set; }
 }
