@@ -10,13 +10,13 @@ namespace Application.CQRS.Favorites.Handlers;
 
 public class AddFavorite
 {
-    public class AddFavoriteCommand : IRequest<Result<FavoriteDto>>
+    public class AddFavoriteCommand : IRequest<Result<FavoriteAddDto>>
     {
         public int UserId { get; set; }
         public int ProductId { get; set; }
     }
 
-    public sealed class Handler : IRequestHandler<AddFavoriteCommand, Result<FavoriteDto>>
+    public sealed class Handler : IRequestHandler<AddFavoriteCommand, Result<FavoriteAddDto>>
     {
         private readonly IFavoriteRepository _favoriteRepository;
         private readonly IMapper _mapper;
@@ -27,7 +27,7 @@ public class AddFavorite
             _mapper = mapper;
         }
 
-        public async Task<Result<FavoriteDto>> Handle(AddFavoriteCommand request, CancellationToken cancellationToken)
+        public async Task<Result<FavoriteAddDto>> Handle(AddFavoriteCommand request, CancellationToken cancellationToken)
         {
 
             if (_favoriteRepository.Exists(request.UserId, request.ProductId))
@@ -50,9 +50,9 @@ public class AddFavorite
                 throw new Exception("Failed to add favorite.");
             }
 
-            var favoriteDto = _mapper.Map<FavoriteDto>(favorite);
+            var favoriteDto = _mapper.Map<FavoriteAddDto>(favorite);
 
-            return new Result<FavoriteDto>
+            return new Result<FavoriteAddDto>
             {
                 Data = favoriteDto,
                 Errors = new List<string>(),

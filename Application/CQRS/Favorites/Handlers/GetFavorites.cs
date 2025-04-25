@@ -1,4 +1,6 @@
 ﻿using Application.CQRS.Favorites.ResponseDto;
+using Application.CQRS.Products.ResponseDto;
+using AutoMapper;
 using Common.GlobalResponses.Generics;
 using MediatR;
 using Repository.Repositories;
@@ -15,10 +17,12 @@ public class GetFavorites
     public sealed class Handler : IRequestHandler<GetFavoritesQuery, Result<List<FavoriteDto>>>
     {
         private readonly IFavoriteRepository _favoriteRepository;
+        private readonly IMapper _mapper;
 
-        public Handler(IFavoriteRepository favoriteRepository)
+        public Handler(IFavoriteRepository favoriteRepository, IMapper mapper)
         {
             _favoriteRepository = favoriteRepository;
+            _mapper = mapper;
         }
 
         public Task<Result<List<FavoriteDto>>> Handle(GetFavoritesQuery request, CancellationToken cancellationToken)
@@ -37,7 +41,7 @@ public class GetFavorites
 
             var favoriteDtos = favorites.Select(f => new FavoriteDto
             {
-                ProductId = f.ProductId
+                Product = _mapper.Map<GetAllProductDto>(f.Product)
             }).ToList();
 
 

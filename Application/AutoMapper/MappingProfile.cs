@@ -37,6 +37,8 @@ public class MappingProfile : Profile
 
         CreateMap<Product, GetProductByIdDto>();
         CreateMap<Product, UpdateProductDto>();
+        CreateMap<Product, GetAllProductDto>();
+
         CreateMap<Product, AddProductDto>();
         CreateMap<AddProductCommand, Product>();
         CreateMap<AddCommand, Category>();
@@ -69,6 +71,8 @@ public class MappingProfile : Profile
         CreateMap<MembershipPlan, MembershipPlanDto>();
         CreateMap<Order, OrderDto>();
         CreateMap<OrderLine, OrderLineDto>();
+        CreateMap<Favorite, FavoriteAddDto>();
+
 
 
     }

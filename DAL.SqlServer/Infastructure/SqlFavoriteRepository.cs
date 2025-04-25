@@ -1,5 +1,6 @@
 ﻿using DAL.SqlServer.Context;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Repository.Repositories;
 
 namespace DAL.SqlServer.Infastructure;
@@ -22,7 +23,10 @@ public class SqlFavoriteRepository(AppDbContext context) : IFavoriteRepository
 
     public List<Favorite> GetByUserId(int userId)
     {
-        return _context.Favorites.Where(f=>f.UserId == userId).ToList();
+        return _context.Favorites
+            .Include(f => f.Product)
+            .Where(f => f.UserId == userId)
+            .ToList();
     }
 
     public bool Remove(int userId, int productId)

@@ -1,6 +1,9 @@
-﻿namespace Application.CQRS.Favorites.ResponseDto;
+﻿using Application.CQRS.Products.ResponseDto;
+
+namespace Application.CQRS.Favorites.ResponseDto;
 
 public class FavoriteDto
 {
-    public int ProductId { get; set; }
+
+    public GetAllProductDto Product { get; set; }
 }
