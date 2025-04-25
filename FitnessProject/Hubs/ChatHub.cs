@@ -71,13 +71,6 @@ public class ChatHub : Hub
 
             if (_connections.TryGetValue(receiverId.ToString(), out var receiverConnectionId))
             {
-                await Clients.Client(receiverConnectionId).SendAsync("ReceiveMessage", new
-                {
-                    SenderId = senderId,
-                    Message = message,
-                    SentAt = DateTime.UtcNow
-                });
-
                 await Clients.Client(receiverConnectionId).SendAsync("ReceiveMessage", messageDto);
             }
             else
