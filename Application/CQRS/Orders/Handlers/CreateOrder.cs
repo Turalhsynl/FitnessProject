@@ -33,7 +33,6 @@ public class CreateOrder
                 await _unitOfWork.OrderRepository.AddAsync(order);
                 await _unitOfWork.SaveChangeAsync();
 
-                // OrderLine əlavə etmə və stoku azaltma
                 foreach (var item in request.OrderLines)
                 {
                     var orderLine = new OrderLine
@@ -46,16 +45,14 @@ public class CreateOrder
 
                     await _unitOfWork.OrderLineRepository.AddAsync(orderLine);
 
-                    // Məhsulun stokunu azaldırıq
                     var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
                     if (product != null && product.Quantity >= item.Quantity)
                     {
-                        product.Quantity -= item.Quantity;  // Məhsulun stokunu azaldırıq
-                        _unitOfWork.ProductRepository.Update(product); // Yenilənmiş məhsulu database-ə yazırıq
+                        product.Quantity -= item.Quantity;
+                        _unitOfWork.ProductRepository.Update(product);
                     }
                     else
                     {
-                        // Əgər stok kifayət etmirsə, xəta mesajı göndərə bilərik
                         return new Result<OrderDto>
                         {
                             IsSuccess = false,
@@ -64,7 +61,7 @@ public class CreateOrder
                     }
                 }
 
-                await _unitOfWork.SaveChangeAsync();  // Bütün dəyişiklikləri qeyd edirik
+                await _unitOfWork.SaveChangeAsync();
 
                 var orderDTO = new OrderDto
                 {

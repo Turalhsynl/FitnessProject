@@ -11,7 +11,6 @@ public class StripeService
         StripeConfiguration.ApiKey = _configuration["Stripe:SecretKey"];
     }
 
-    // PaymentIntent yaratmaq
     public string CreatePayment(decimal amount, string email)
     {
         var options = new PaymentIntentCreateOptions
@@ -27,7 +26,6 @@ public class StripeService
         return paymentIntent.Id;
     }
 
-    // PaymentIntent təsdiqləmək (düzgün)
     public PaymentIntent ConfirmPayment(string paymentIntentId, string paymentMethodId)
     {
         var service = new PaymentIntentService();

@@ -15,7 +15,6 @@ public class StripeController : ControllerBase
         _stripeService = stripeService;
     }
 
-    // Ödəniş yaratmaq
     [HttpPost("create-payment")]
     public IActionResult CreatePayment([FromBody] PaymentRequest request)
     {
@@ -28,7 +27,6 @@ public class StripeController : ControllerBase
         return Ok(new { PaymentIntentId = paymentIntentId });
     }
 
-    // PaymentIntent təsdiqləmək
     [HttpPost("confirm-payment")]
     public IActionResult ConfirmPayment([FromBody] ConfirmPaymentRequest request)
     {
@@ -48,11 +46,10 @@ public class StripeController : ControllerBase
 
     public class PaymentRequest
     {
-        public decimal Amount { get; set; } // Ödəniş məbləği
-        public string Email { get; set; }  // İstifadəçi e-poçtu
+        public decimal Amount { get; set; } 
+        public string Email { get; set; } 
     }
 
-    // PaymentIntent təsdiqləmək üçün lazım olan model
     public class ConfirmPaymentRequest
     {
         public string PaymentIntentId { get; set; }
