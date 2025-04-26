@@ -27,12 +27,13 @@ public class CreateOrder
                 {
                     UserId = request.UserId,
                     TotalAmount = request.TotalAmount,
-                    Status = "Pending",
+                    Status = "Completed",
                 };
 
                 await _unitOfWork.OrderRepository.AddAsync(order);
                 await _unitOfWork.SaveChangeAsync();
 
+                // OrderLine əlavə etmə və stoku azaltma
                 foreach (var item in request.OrderLines)
                 {
                     var orderLine = new OrderLine
@@ -44,9 +45,26 @@ public class CreateOrder
                     };
 
                     await _unitOfWork.OrderLineRepository.AddAsync(orderLine);
+
+                    // Məhsulun stokunu azaldırıq
+                    var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
+                    if (product != null && product.Quantity >= item.Quantity)
+                    {
+                        product.Quantity -= item.Quantity;  // Məhsulun stokunu azaldırıq
+                        _unitOfWork.ProductRepository.Update(product); // Yenilənmiş məhsulu database-ə yazırıq
+                    }
+                    else
+                    {
+                        // Əgər stok kifayət etmirsə, xəta mesajı göndərə bilərik
+                        return new Result<OrderDto>
+                        {
+                            IsSuccess = false,
+                            Errors = new List<string> { "Not enough stock for product: " + item.ProductId }
+                        };
+                    }
                 }
 
-                await _unitOfWork.SaveChangeAsync();
+                await _unitOfWork.SaveChangeAsync();  // Bütün dəyişiklikləri qeyd edirik
 
                 var orderDTO = new OrderDto
                 {
@@ -66,7 +84,7 @@ public class CreateOrder
                 {
                     Data = orderDTO,
                     IsSuccess = true,
-                    Errors = []
+                    Errors = new List<string>()
                 };
             }
             catch (Exception ex)
@@ -79,6 +97,6 @@ public class CreateOrder
                 };
             }
         }
-
     }
+
 }

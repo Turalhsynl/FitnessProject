@@ -1,28 +1,41 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Stripe;
 
-namespace Application.Services;
-
 public class StripeService
 {
     private readonly IConfiguration _configuration;
+
     public StripeService(IConfiguration configuration)
     {
         _configuration = configuration;
         StripeConfiguration.ApiKey = _configuration["Stripe:SecretKey"];
     }
 
+    // PaymentIntent yaratmaq
     public string CreatePayment(decimal amount, string email)
     {
         var options = new PaymentIntentCreateOptions
         {
             Amount = (long)(amount * 100),
             Currency = "usd",
-            ReceiptEmail = email
+            ReceiptEmail = email,
+            PaymentMethodTypes = new List<string> { "card" }
         };
 
         var service = new PaymentIntentService();
         var paymentIntent = service.Create(options);
-        return paymentIntent.ClientSecret;
+        return paymentIntent.Id;
+    }
+
+    // PaymentIntent təsdiqləmək (düzgün)
+    public PaymentIntent ConfirmPayment(string paymentIntentId, string paymentMethodId)
+    {
+        var service = new PaymentIntentService();
+        var options = new PaymentIntentConfirmOptions
+        {
+            PaymentMethod = paymentMethodId
+        };
+        var paymentIntent = service.Confirm(paymentIntentId, options);
+        return paymentIntent;
     }
 }
