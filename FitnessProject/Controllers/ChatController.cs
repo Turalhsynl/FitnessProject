@@ -1,4 +1,6 @@
-﻿using Application.CQRS.chat_messages.Handlers;
+﻿using Application.Abstractions;
+using Application.CQRS.chat_messages.Handlers;
+using Application.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,9 +8,10 @@ namespace FitnessProject.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ChatController(ISender sender) : ControllerBase
+public class ChatController(ISender sender, IOpenAIService openAIService) : ControllerBase
 {
     private readonly ISender _sender = sender;
+    private readonly IOpenAIService _openAIService= openAIService;
 
     [HttpPost("send")]
     public async Task<IActionResult> SendMessage([FromBody] AddChatMessage.AddChatMessageCommand command)
@@ -19,6 +22,20 @@ public class ChatController(ISender sender) : ControllerBase
             return BadRequest(result);
 
         return Ok(result);
+    }
+
+
+    [HttpPost("ask-ai")]
+    public async Task<IActionResult> AskAI([FromBody] string userMessage)
+    {
+        if (string.IsNullOrEmpty(userMessage))
+        {
+            return BadRequest("Message cannot be empty.");
+        }
+
+        var aiResponse = await _openAIService.GetResponseAsync(userMessage);
+
+        return Ok(new { Response = aiResponse });
     }
 
     [HttpGet("conversation")]

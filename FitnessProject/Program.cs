@@ -29,6 +29,21 @@ builder.Services.AddCors(options =>
         });
 });
 
+//builder.Services.AddSingleton<IOpenAIService>(sp =>
+//{
+//    var configuration = sp.GetRequiredService<IConfiguration>();
+//    var apiKey = configuration["OpenAI:ApiKey"];
+//    return new OpenAIService(apiKey);
+//});
+
+
+builder.Services.AddSingleton<IOpenAIService>(sp =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    var apiKey = configuration["OpenAI:ApiKey"];
+    return new OpenAIService(apiKey);
+});
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

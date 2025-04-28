@@ -14,7 +14,7 @@ public class User : BaseEntity
     public string Email { get; set; }
     public string Password { get; set; }
     public UserRoles UserRole { get; set; }
-
+    public ICollection<FitnessProgram> FitnessPrograms { get; set; }//
     public int? MembershipPlanId { get; set; }
     public MembershipPlan MembershipPlan { get; set; }
     public ICollection<UserProgram> PurchasedProqrams { get; set; }

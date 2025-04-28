@@ -1,4 +1,6 @@
-﻿using Application.CQRS.chat_messages.Handlers;
+﻿using Application.Abstractions;
+using Application.CQRS.chat_messages.Handlers;
+using Application.Services;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
@@ -11,11 +13,12 @@ public class ChatHub : Hub
 {
     private readonly ISender _sender;
 
-    private static readonly ConcurrentDictionary<string, string> _connections = new();
-
-    public ChatHub(ISender sender)
+   private static readonly ConcurrentDictionary<string, string> _connections = new();
+    private readonly IOpenAIService _openAIService;
+    public ChatHub(ISender sender, IOpenAIService openAIService)
     {
         _sender = sender;
+        _openAIService = openAIService;
     }
 
     public override Task OnConnectedAsync()
@@ -46,44 +49,71 @@ public class ChatHub : Hub
     public async Task SendMessage(int receiverId, string message)
     {
         var senderIdStr = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userName = Context.User?.FindFirst(ClaimTypes.Name)?.Value;
 
         if (!int.TryParse(senderIdStr, out var senderId))
         {
             throw new HubException("Invalid sender");
         }
 
-        var command = new AddChatMessage.AddChatMessageCommand
-        {
-            ReceiverId = receiverId,
-            Message = message
-        };
+        const int AI_USER_ID = -1;
 
-        var result = await _sender.Send(command);
-
-        if (result.IsSuccess)
+        if (receiverId == AI_USER_ID)
         {
-            var messageDto = new
+            string aiPrompt = message;
+
+            if (message.Trim().ToLower() == "merhaba" && !string.IsNullOrEmpty(userName))
             {
-                SenderId = senderId,
-                Message = message,
+                aiPrompt = $"Kullanıcı sana 'Merhaba' dedi. Onun adı {userName}. Ona adıyla sıcak bir şekilde cevap ver.";
+            }
+
+            var aiResponse = await _openAIService.GetResponseAsync(aiPrompt);
+
+            var aiMessageDto = new
+            {
+                SenderId = AI_USER_ID,
+                Message = aiResponse,
                 SentAt = DateTime.UtcNow
             };
 
-            if (_connections.TryGetValue(receiverId.ToString(), out var receiverConnectionId))
-            {
-                await Clients.Client(receiverConnectionId).SendAsync("ReceiveMessage", messageDto);
-            }
-            else
-            {
-                Console.WriteLine("Receiver is not connected.");
-            }
-
-            await Clients.Caller.SendAsync("ReceiveMessage", messageDto);
+            await Clients.Caller.SendAsync("ReceiveMessage", aiMessageDto);
         }
         else
         {
-            Console.WriteLine("Message could not be sent.");
+            var command = new AddChatMessage.AddChatMessageCommand
+            {
+                ReceiverId = receiverId,
+                Message = message
+            };
+
+            var result = await _sender.Send(command);
+
+            if (result.IsSuccess)
+            {
+                var messageDto = new
+                {
+                    SenderId = senderId,
+                    Message = message,
+                    SentAt = DateTime.UtcNow
+                };
+
+                if (_connections.TryGetValue(receiverId.ToString(), out var receiverConnectionId))
+                {
+                    await Clients.Client(receiverConnectionId).SendAsync("ReceiveMessage", messageDto);
+                }
+                else
+                {
+                    Console.WriteLine("Receiver is not connected.");
+                }
+
+                await Clients.Caller.SendAsync("ReceiveMessage", messageDto);
+            }
+            else
+            {
+                Console.WriteLine("Message could not be sent.");
+            }
         }
     }
+
+
 }
- 
