@@ -1,6 +1,10 @@
 ﻿using Application.CQRS.Orders.Handlers;
+using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Repositories;
+using Stripe.Climate;
 using static Application.CQRS.Orders.Handlers.CreateOrder;
 using static Application.CQRS.Orders.Handlers.GetOrderById;
 using static Application.CQRS.Orders.Handlers.GetOrderLines;
@@ -51,5 +55,6 @@ public class OrderController(ISender sender) : ControllerBase
 
         return NotFound();
     }
+
 }
 

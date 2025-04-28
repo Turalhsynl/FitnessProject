@@ -1,11 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Stripe;
 
-namespace Application.Services;
-
 public class StripeService
 {
     private readonly IConfiguration _configuration;
+
     public StripeService(IConfiguration configuration)
     {
         _configuration = configuration;
@@ -18,11 +17,23 @@ public class StripeService
         {
             Amount = (long)(amount * 100),
             Currency = "usd",
-            ReceiptEmail = email
+            ReceiptEmail = email,
+            PaymentMethodTypes = new List<string> { "card" }
         };
 
         var service = new PaymentIntentService();
         var paymentIntent = service.Create(options);
-        return paymentIntent.ClientSecret;
+        return paymentIntent.Id;
+    }
+
+    public PaymentIntent ConfirmPayment(string paymentIntentId, string paymentMethodId)
+    {
+        var service = new PaymentIntentService();
+        var options = new PaymentIntentConfirmOptions
+        {
+            PaymentMethod = paymentMethodId
+        };
+        var paymentIntent = service.Confirm(paymentIntentId, options);
+        return paymentIntent;
     }
 }

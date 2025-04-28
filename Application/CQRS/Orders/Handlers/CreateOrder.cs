@@ -27,7 +27,7 @@ public class CreateOrder
                 {
                     UserId = request.UserId,
                     TotalAmount = request.TotalAmount,
-                    Status = "Pending",
+                    Status = "Completed",
                 };
 
                 await _unitOfWork.OrderRepository.AddAsync(order);
@@ -44,6 +44,21 @@ public class CreateOrder
                     };
 
                     await _unitOfWork.OrderLineRepository.AddAsync(orderLine);
+
+                    var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
+                    if (product != null && product.Quantity >= item.Quantity)
+                    {
+                        product.Quantity -= item.Quantity;
+                        _unitOfWork.ProductRepository.Update(product);
+                    }
+                    else
+                    {
+                        return new Result<OrderDto>
+                        {
+                            IsSuccess = false,
+                            Errors = new List<string> { "Not enough stock for product: " + item.ProductId }
+                        };
+                    }
                 }
 
                 await _unitOfWork.SaveChangeAsync();
@@ -66,7 +81,7 @@ public class CreateOrder
                 {
                     Data = orderDTO,
                     IsSuccess = true,
-                    Errors = []
+                    Errors = new List<string>()
                 };
             }
             catch (Exception ex)
@@ -79,6 +94,6 @@ public class CreateOrder
                 };
             }
         }
-
     }
+
 }
