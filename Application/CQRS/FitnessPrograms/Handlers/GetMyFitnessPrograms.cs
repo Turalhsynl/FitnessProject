@@ -35,7 +35,7 @@ namespace Application.CQRS.FitnessPrograms.Handlers;
                         Errors = ["Kullanıcı bulunamadı."]
                     };
 
-                if (user.UserRole != UserRoles.Admin) 
+                if (user.UserRole != UserRoles.Coach) 
                     return new Result<List<FitnessProgramDto>>
                     {
                         IsSuccess = false,

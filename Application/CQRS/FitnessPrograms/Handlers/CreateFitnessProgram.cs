@@ -43,7 +43,7 @@ public class CreateFitnessProgram
                     return new Result<int> { IsSuccess = false, Errors = new List<string> { "Kullanıcı bulunamadı." } };
 
        
-                if (user.UserRole != UserRoles.Admin)
+                if (user.UserRole != UserRoles.Coach)
                     return new Result<int> { IsSuccess = false, Errors = new List<string> { "Sadece eğitmenler yeni fitness programı oluşturabilir." } };
 
           
