@@ -14,4 +14,5 @@ public class FitnessProgramDto
     public string VideoUrl { get; set; }
     public string ImageUrl { get; set; }
     public List<RecipeDto> Recipes { get; set; }
+    public int UserId { get; set; }
 }

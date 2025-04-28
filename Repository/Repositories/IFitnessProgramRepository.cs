@@ -7,6 +7,8 @@ public interface IFitnessProgramRepository
     Task AddAsync(FitnessProgram program);
     void Update(FitnessProgram program);
     Task SoftDeleteAsync(int id);
+    Task<List<FitnessProgram>> GetByUserIdAsync(int userId);
+
 
     //Task<FitnessProgram> GetWithRecipesAsync(int id);
 }

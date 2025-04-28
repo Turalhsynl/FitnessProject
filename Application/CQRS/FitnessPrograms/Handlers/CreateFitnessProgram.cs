@@ -1,4 +1,6 @@
-﻿using Common.GlobalResponses.Generics;
+﻿using Application.Security;
+using Common.GlobalResponses.Generics;
+using Domain.Enums;
 using MediatR;
 using Repository.Common;
 
@@ -18,30 +20,65 @@ public class CreateFitnessProgram
         public string VideoUrl { get; set; }
     }
 
-    public class CreateFitnessProgramCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateFitnessProgramCommand, Result<int>>
+     public class CreateFitnessProgramCommandHandler : IRequestHandler<CreateFitnessProgramCommand, Result<int>>
     {
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserContext _userContext; 
+
+        public CreateFitnessProgramCommandHandler(IUnitOfWork unitOfWork, IUserContext userContext)
+        {
+            _unitOfWork = unitOfWork;
+            _userContext = userContext;
+        }
 
         public async Task<Result<int>> Handle(CreateFitnessProgramCommand request, CancellationToken cancellationToken)
         {
-            var fitnessProgram = new FitnessProgram
+            try
             {
-                Name = request.Name,
-                Description = request.Description,
-                Level = request.Level,
-                DurationInWeeks = request.DurationInWeeks,
-                Gender = request.Gender,
-                Price = request.Price,
-                VideoUrl = request.VideoUrl,
-                ImageUrl = request.ImageUrl,
-                CreatedDate = DateTime.UtcNow,
-            };
+              
+                var userId = _userContext.MustGetUserId();
+                var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
 
-            await _unitOfWork.FitnessProgramRepository.AddAsync(fitnessProgram);
-            await _unitOfWork.SaveChangeAsync();
+                if (user == null)
+                    return new Result<int> { IsSuccess = false, Errors = new List<string> { "Kullanıcı bulunamadı." } };
 
-            return new Result<int> { IsSuccess = true, Data = fitnessProgram.Id, Errors = [] };
+       
+                if (user.UserRole != UserRoles.Admin)
+                    return new Result<int> { IsSuccess = false, Errors = new List<string> { "Sadece eğitmenler yeni fitness programı oluşturabilir." } };
+
+          
+                var fitnessProgram = new FitnessProgram
+                {
+                    Name = request.Name,
+                    Description = request.Description,
+                    Level = request.Level,
+                    DurationInWeeks = request.DurationInWeeks,
+                    Gender = request.Gender,
+                    Price = request.Price,
+                    VideoUrl = request.VideoUrl,
+                    ImageUrl = request.ImageUrl,
+                    CreatedDate = DateTime.UtcNow,
+                    UserId = user.Id
+                };
+
+           
+                await _unitOfWork.FitnessProgramRepository.AddAsync(fitnessProgram);
+                await _unitOfWork.SaveChangeAsync();
+
+        
+                return new Result<int> { IsSuccess = true, Data = fitnessProgram.Id, Errors = new List<string>() };
+            }
+            catch (Exception ex)
+            {
+           
+                return new Result<int>
+                {
+                    IsSuccess = false,
+                    Errors = new List<string> { $"An error occurred while saving the entity changes. Error: {ex.Message}, InnerException: {ex.InnerException?.Message}" }
+                };
+            }
         }
+
     }
 
 }

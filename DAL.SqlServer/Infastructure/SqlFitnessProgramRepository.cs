@@ -21,6 +21,14 @@ public class SqlFitnessProgramRepository(AppDbContext context) : IFitnessProgram
             .ToListAsync();
     }
 
+    public async Task<List<FitnessProgram>> GetByUserIdAsync(int userId)
+    {
+        return await _context.FitnessPrograms
+                             .Where(fp => fp.UserId == userId)
+                             .ToListAsync();
+    }
+
+
     public async Task AddAsync(FitnessProgram program)
     {
         await _context.FitnessPrograms.AddAsync(program);

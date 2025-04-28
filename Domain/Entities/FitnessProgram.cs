@@ -11,5 +11,7 @@ public class FitnessProgram : BaseEntity
     public decimal Price { get; set; }
     public string VideoUrl { get; set; }
     public string ImageUrl { get; set; }
+    public int UserId { get; set; }
+    public User User { get; set; }
     public ICollection<FitnessProgramRecipe> FitnessProgramRecipes { get; set; }
 }

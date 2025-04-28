@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.CQRS.FitnessPrograms.Handlers;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Application.CQRS.FitnessPrograms.Handlers.CreateFitnessProgram;
@@ -42,11 +43,39 @@ public class FitnessProgramController(ISender sender) : ControllerBase
         return Ok(result.Data);
     }
 
+    [HttpGet("GetMyFitnessPrograms/{userId}")]
+    public async Task<IActionResult> GetMyFitnessPrograms(int userId)
+    {
+        var query = new GetMyFitnessPrograms.GetMyFitnessProgramsQuery
+        {
+            UserId = userId
+        };
+
+        var result = await _sender.Send(query);
+
+        if (!result.IsSuccess)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
+
     [HttpPost("Create")]
     public async Task<IActionResult> CreateFitnessProgram([FromBody] CreateFitnessProgramCommand request)
     {
-        return Ok(await _sender.Send(request));
+        var result = await _sender.Send(request);
+
+        if (result.IsSuccess)
+        {
+            
+            return Ok(result); 
+        }
+        else
+        {
+            return BadRequest(result); 
+        }
     }
+
 
     [HttpPut("Update")]
     public async Task<IActionResult> UpdateFitnessProgram([FromBody] UpdateFitnessProgramCommand request)
