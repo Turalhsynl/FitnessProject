@@ -19,12 +19,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
+    options.AddPolicy("WithSpecificOrigin",
         policy =>
         {
-            policy.AllowAnyOrigin()
-                  .AllowAnyMethod() 
-                  .AllowAnyHeader();
+            policy.WithOrigins("https://localhost:7298", "http://localhost:5173")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials();
         });
 });
 
@@ -81,7 +82,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles(); // Bu mütləq olmalıdır
 
-app.UseCors("AllowAll");
+app.UseCors("WithSpecificOrigin");
 
 app.UseAuthorization();
 app.MapHub<ChatHub>("/chathub");
