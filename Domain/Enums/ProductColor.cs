@@ -8,4 +8,7 @@ public enum ProductColors
     Green = 4,
     Brown = 5,
     Blue = 6,
+    Yellow = 7,
+    White = 8,
+    Purple = 9,
 }
