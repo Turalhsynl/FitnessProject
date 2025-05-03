@@ -1,6 +1,8 @@
 ﻿using Application.CQRS.MembershipPlans.Handlers;
+using Application.CQRS.MembershipPlans.ResponseDto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using static Application.CQRS.MembershipPlans.Handlers.SubscribeToMembershipPlan;
 
 namespace FitnessProject.API.Controllers;
 
@@ -53,5 +55,16 @@ public class MembershipPlanController(ISender sender) : ControllerBase
     {
         var result = await _sender.Send(new CheckMembershipPlanExists.CheckMembershipPlanExistsQuery { Id = id });
         return Ok(result);
+    }
+
+    [HttpPost("subscribe-membership")]
+    public async Task<IActionResult> SubscribeMembership([FromBody] SubscribeToMembershipDto dto)
+    {
+        var result = await _sender.Send(new SubscribeToMembershipCommand(dto));
+
+        if (result.IsSuccess)
+            return Ok(result);
+
+        return BadRequest(result);
     }
 }
