@@ -4,18 +4,11 @@ using Repository.Repositories;
 
 namespace Application.Services;
 
-public class ProductService : IProductService
+public class ProductService(IFileUploadService fileUploadService, IProductRepository productRepository, IUnitOfWork unitOfWork) : IProductService
 {
-    private readonly IFileUploadService _fileUploadService;
-    private readonly IProductRepository _productRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public ProductService(IFileUploadService fileUploadService, IProductRepository productRepository, IUnitOfWork unitOfWork)
-    {
-        _fileUploadService = fileUploadService;
-        _productRepository = productRepository;
-        _unitOfWork = unitOfWork;
-    }
+    private readonly IFileUploadService _fileUploadService = fileUploadService;
+    private readonly IProductRepository _productRepository = productRepository;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<string> UploadProductImageAsync(UploadProductImageDto dto)
     {

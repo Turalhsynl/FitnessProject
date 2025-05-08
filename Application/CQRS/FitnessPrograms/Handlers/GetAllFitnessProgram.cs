@@ -39,7 +39,7 @@ public class GetAllFitnessProgram
                     DurationInWeeks = program.DurationInWeeks,
                     Price = program.Price,
                     Gender = program.Gender,
-                    ImageUrl = program.ImageUrl,
+                    ImageId = program.ImageId,
                     Recipes = new List<RecipeDto>()
                 };
 

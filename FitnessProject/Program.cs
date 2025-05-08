@@ -60,10 +60,12 @@ builder.Services.AddAuthenticationService(builder.Configuration);
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddScoped<IProductRepository, SqlProductRepository>();
+builder.Services.AddScoped<IFitnessProgramRepository, SqlFitnessProgramRepository>();
 builder.Services.AddScoped<IFileUploadRepository, SqlFileUploadRepository>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProgramService, ProgramImageService>();
 builder.Services.AddScoped<StripeService>();
 builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddSignalR();

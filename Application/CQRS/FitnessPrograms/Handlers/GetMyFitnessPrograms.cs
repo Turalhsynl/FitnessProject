@@ -54,7 +54,7 @@ namespace Application.CQRS.FitnessPrograms.Handlers;
                     Gender = x.Gender,
                     Price = x.Price,
                     VideoUrl = x.VideoUrl,
-                    ImageUrl = x.ImageUrl,
+                    ImageId = x.ImageId,
                     UserId = x.UserId,
                 }).ToList();
 

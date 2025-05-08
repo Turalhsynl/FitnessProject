@@ -54,7 +54,7 @@ public class GetFitnessProgramById
                 Gender = program.Gender,
                 Price = program.Price,
                 VideoUrl = program.VideoUrl,
-                ImageUrl = program.ImageUrl,
+                ImageId = program.ImageId,
                 Recipes = recipeDtos
             };
 

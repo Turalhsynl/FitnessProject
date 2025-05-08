@@ -22,35 +22,31 @@ public class UserService : IUserService
         if (dto.ProfileImage == null || dto.ProfileImage.Length == 0)
             throw new Exception("Profil şəkli boşdur.");
 
-        // Şəkili yükləyirik və file entity-ni əldə edirik
         var fileName = await _fileUploadService.UploadAsync(dto.ProfileImage);
 
-        // Şəkil entity-sini DB-yə əlavə edirik
         var fileEntity = new Domain.Entities.File
         {
-            FilePath = fileName, // FilePath burada şəkil yolunu saxlayır
+            FilePath = fileName,
             FileName = Path.GetFileName(fileName),
             FileSize = dto.ProfileImage.Length,
             FileType = dto.ProfileImage.ContentType,
-            CreatedBy = _userContext.UserId,  // Əgər userContext var
+            CreatedBy = _userContext.UserId,
             CreatedDate = DateTime.UtcNow
         };
 
         await _unitOfWork.FileUploadRepository.AddAsync(fileEntity);
         await _unitOfWork.SaveChangeAsync();
 
-        // İndi fileEntity.Id-ni istifadəçinin ProfileImageId-sinə təyin edirik
-        var userId = _userContext.UserId; // Hal-hazırda daxil olan istifadəçi
+        var userId = _userContext.UserId;
         var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
 
         if (user == null)
             throw new Exception("İstifadəçi tapılmadı.");
 
-        // Profil şəkilinin ID-sini istifadəçi profilinə əlavə edirik
-        user.ProfileImageId = fileEntity.Id - 1;  // Burada artıq şəkilin ID-sini istifadə edirik
+        user.ProfileImageId = fileEntity.Id - 1;
         _unitOfWork.UserRepository.Update(user);
         await _unitOfWork.SaveChangeAsync();
 
-        return user.ProfileImageId ?? 0;  // Şəkilin ID-sini qaytarırıq
+        return user.ProfileImageId ?? 0;
     }
 }

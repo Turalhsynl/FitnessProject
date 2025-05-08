@@ -16,7 +16,7 @@ public class CreateFitnessProgram
         public int DurationInWeeks { get; set; }
         public string Gender { get; set; }
         public decimal Price { get; set; }
-        public string ImageUrl { get; set; }
+        public int ImageId { get; set; }
         public string VideoUrl { get; set; }
     }
 
@@ -56,7 +56,7 @@ public class CreateFitnessProgram
                     Gender = request.Gender,
                     Price = request.Price,
                     VideoUrl = request.VideoUrl,
-                    ImageUrl = request.ImageUrl,
+                    ImageId = request.ImageId,
                     CreatedDate = DateTime.UtcNow,
                     UserId = user.Id
                 };

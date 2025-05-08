@@ -17,7 +17,7 @@ public class UpdateFitnessProgram
         public string Gender { get; set; }
         public decimal Price { get; set; }
         public string VideoUrl { get; set; }
-        public string ImageUrl { get; set; }
+        public int ImageId { get; set; }
     }
 
     public class UpdateFitnessProgramCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateFitnessProgramCommand, Result>
@@ -40,7 +40,7 @@ public class UpdateFitnessProgram
             fitnessProgram.Gender = request.Gender;
             fitnessProgram.Price = request.Price;
             fitnessProgram.VideoUrl = request.VideoUrl;
-            fitnessProgram.ImageUrl = request.ImageUrl;
+            fitnessProgram.ImageId = request.ImageId;
             fitnessProgram.UpdatedDate = DateTime.UtcNow;
 
             _unitOfWork.FitnessProgramRepository.Update(fitnessProgram);
