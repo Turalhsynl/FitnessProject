@@ -17,7 +17,7 @@ public class AddRecipe
         public string Description { get; set; }
         public string Ingredients { get; set; }
         public string Instructions { get; set; }
-        public string ImageUrl { get; set; }
+        public int ImageId { get; set; }
         public int Calories { get; set; }
         public string MealType { get; set; }
     }
@@ -42,7 +42,7 @@ public class AddRecipe
                 Description = request.Description,
                 Ingredients = request.Ingredients,
                 Instructions = request.Instructions,
-                ImageUrl = request.ImageUrl,
+                ImageId = request.ImageId,
                 Calories = request.Calories,
                 MealType = request.MealType,
                 CreatedDate = DateTime.Now

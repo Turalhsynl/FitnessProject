@@ -29,14 +29,6 @@ builder.Services.AddCors(options =>
         });
 });
 
-//builder.Services.AddSingleton<IOpenAIService>(sp =>
-//{
-//    var configuration = sp.GetRequiredService<IConfiguration>();
-//    var apiKey = configuration["OpenAI:ApiKey"];
-//    return new OpenAIService(apiKey);
-//});
-
-
 builder.Services.AddSingleton<IOpenAIService>(sp =>
 {
     var configuration = sp.GetRequiredService<IConfiguration>();
@@ -62,12 +54,14 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IProductRepository, SqlProductRepository>();
 builder.Services.AddScoped<IFitnessProgramRepository, SqlFitnessProgramRepository>();
 builder.Services.AddScoped<ICategoryRepository, SqlCategoryRepository>();
+builder.Services.AddScoped<IRecipeRepository, SqlRecipeRepository>();
 builder.Services.AddScoped<IFileUploadRepository, SqlFileUploadRepository>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProgramService, ProgramImageService>();
 builder.Services.AddScoped<ICategoryService, CategoryImageService>();
+builder.Services.AddScoped<IRecipeService, RecipeImageService>();
 builder.Services.AddScoped<StripeService>();
 builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddSignalR();
@@ -84,7 +78,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles(); // Bu mütləq olmalıdır
+app.UseStaticFiles();
 
 app.UseCors("WithSpecificOrigin");
 

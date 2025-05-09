@@ -10,7 +10,7 @@ public class Recipe : BaseEntity
     public string Ingredients { get; set; }
     public string Instructions { get; set; }
 
-    public string ImageUrl { get; set; }
+    public int? ImageId { get; set; }
 
     public int Calories { get; set; }
 
