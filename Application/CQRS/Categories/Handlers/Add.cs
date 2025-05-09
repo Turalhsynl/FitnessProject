@@ -13,7 +13,7 @@ public class Add
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string ImageUrl { get; set; }
+        public int ImageId { get; set; }
     }
 
     public sealed class Handler(IUnitOfWork unitOfWork, IMapper mapper, IUserContext userContext) : IRequestHandler<AddCommand, Result<AddDto>>

@@ -13,7 +13,7 @@ public class UpdateCategory
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string ImageUrl { get; set; }
+        public int ImageId { get; set; }
         //public List<Product> Products { get; set; }
     }
 
@@ -29,7 +29,7 @@ public class UpdateCategory
 
             currentCategory.Name = request.Name;
             currentCategory.Description = request.Description;
-            currentCategory.ImageUrl = request.ImageUrl;
+            currentCategory.ImageId = request.ImageId;
             currentCategory.UpdatedBy = 1;
 
             _unitOfWork.CategoryRepository.Update(currentCategory);

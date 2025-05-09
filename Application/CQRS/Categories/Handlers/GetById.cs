@@ -41,7 +41,7 @@ namespace Application.CQRS.Categories.Handlers
                     Id = currentCategory.Id,
                     Name = currentCategory.Name,
                     Description = currentCategory.Description,
-                    ImageUrl = currentCategory.ImageUrl,
+                    ImageId = currentCategory.ImageId,
                     Products = currentCategory.Products.Select(p => new GetAllProductDto
                     {
                         Id = p.Id,
