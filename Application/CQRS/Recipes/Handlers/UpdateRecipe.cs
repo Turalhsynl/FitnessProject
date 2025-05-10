@@ -15,7 +15,7 @@ public class UpdateRecipe
         public string Description { get; set; }
         public string Ingredients { get; set; }
         public string Instructions { get; set; }
-        public string ImageUrl { get; set; }
+        public int ImageId { get; set; }
         public int Calories { get; set; }
         public string MealType { get; set; }
     }
@@ -48,7 +48,7 @@ public class UpdateRecipe
             recipe.Description = request.Description;
             recipe.Ingredients = request.Ingredients;
             recipe.Instructions = request.Instructions;
-            recipe.ImageUrl = request.ImageUrl;
+            recipe.ImageId = request.ImageId;
             recipe.Calories = request.Calories;
             recipe.MealType = request.MealType;
 

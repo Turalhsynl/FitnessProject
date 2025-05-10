@@ -39,7 +39,7 @@ public class GetFitnessProgramById
                 Description = r.Description,
                 Ingredients = r.Ingredients,
                 Instructions = r.Instructions,
-                ImageUrl = r.ImageUrl,
+                ImageId = r.ImageId,
                 Calories = r.Calories,
                 MealType = r.MealType
             }).ToList();

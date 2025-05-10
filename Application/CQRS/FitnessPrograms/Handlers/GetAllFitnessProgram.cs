@@ -55,7 +55,7 @@ public class GetAllFitnessProgram
                         Description = recipe.Description,
                         Ingredients = recipe.Ingredients,
                         Instructions = recipe.Instructions,
-                        ImageUrl = recipe.ImageUrl,
+                        ImageId = recipe.ImageId,
                         Calories = recipe.Calories,
                         MealType = recipe.MealType
                     });
