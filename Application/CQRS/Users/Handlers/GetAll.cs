@@ -10,16 +10,10 @@ public class GetAll
 {
     public record struct GetAllUsersQuery : IRequest<Result<List<GetAllDto>>> { }
 
-    public sealed class Handler : IRequestHandler<GetAllUsersQuery, Result<List<GetAllDto>>>
+    public sealed class Handler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetAllUsersQuery, Result<List<GetAllDto>>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public Handler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<Result<List<GetAllDto>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {

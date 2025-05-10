@@ -13,5 +13,6 @@ public class GetAllDto
     public decimal Height { get; set; }
     public decimal Weight { get; set; }
     public UserRoles UserRole { get; set; }
+    public int? ProfileImageId { get; set; }
 
 }
