@@ -20,15 +20,42 @@ public class GenerateWorkoutHandler
 
         public async Task<string> Handle(GenerateWorkoutCommand request, CancellationToken cancellationToken)
         {
-            var aiResponse = await _aiService.GetResponseAsync($"Hazırla: {request.RequestDto.Goal}, Səviyyə: {request.RequestDto.Level}");
+            var userInput = $"""
+            Məlumatlar:
+            - Fitness kateqoriyası: {request.RequestDto.FitnessCategory}
+            - Yaş: {request.RequestDto.Age}
+            - Cinsiyyət: {request.RequestDto.Gender}
+            - Məqsəd: {request.RequestDto.Goal}
+            - Səviyyə: {request.RequestDto.Level}
+            - Həftədə məşq sayı: {request.RequestDto.DaysPerWeek}
+            - Bədən tipi: {request.RequestDto.BodyType}
+            - Arzulanan bədən: {request.RequestDto.DreamBody}
+            - Fokus bölgə: {request.RequestDto.TargetZone}
+            - Yuxu saatı: {request.RequestDto.SleepTime}
+            - Boy: {request.RequestDto.Height} sm
+            - Çəki: {request.RequestDto.Weight} kq
+
+            Zəhmət olmasa bu məlumatlara uyğun olaraq 1 aylıq fərdi fitness proqramı hazırla.
+            Sonda bədənim haqqında qısa bir analiz və məsləhət də əlavə et.
+            """;
+
+            var aiResponse = await _aiService.GetResponseAsync(userInput);
 
             var plan = new Domain.Entities.WorkoutPlan
             {
                 UserId = request.RequestDto.UserId,
+                FitnessCategory = request.RequestDto.FitnessCategory,
+                Age = request.RequestDto.Age,
+                Gender = request.RequestDto.Gender,
                 Goal = request.RequestDto.Goal,
                 Level = request.RequestDto.Level,
                 DaysPerWeek = request.RequestDto.DaysPerWeek,
-                Gender = request.RequestDto.Gender,
+                BodyType = request.RequestDto.BodyType,
+                DreamBody = request.RequestDto.DreamBody,
+                TargetZone = request.RequestDto.TargetZone,
+                SleepTime = request.RequestDto.SleepTime,
+                Height = request.RequestDto.Height,
+                Weight = request.RequestDto.Weight,
                 AiGeneratedContent = aiResponse
             };
 
