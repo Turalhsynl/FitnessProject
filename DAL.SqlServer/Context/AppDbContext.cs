@@ -28,6 +28,7 @@ public class AppDbContext : DbContext
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderLine> OrderLines { get; set;}
     public DbSet<ChatMessage> ChatMessages { get; set; }
+    public DbSet<WorkoutPlan> WorkoutPlans { get; set; }
 
 
 }

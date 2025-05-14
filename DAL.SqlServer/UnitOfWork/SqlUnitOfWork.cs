@@ -26,6 +26,7 @@ public class SqlUnitOfWork(string connectionString, AppDbContext context) : IUni
     public SqlOrderRepository _orderRepository;
     public SqlChatMessageRepository _chatMessageRepository;
     public SqlOrderLineRepository _orderLineRepository;
+    public SqlWorkoutPlanRepository _workoutPlanRepository;
 
     public IUserRepository UserRepository => _userRepository ?? new SqlUserRepository(_context);
     public IRefreshTokenRepository RefreshTokenRepository => _refreshTokenRepository ?? new SqlRefreshTokenRepository(_context);
@@ -45,6 +46,7 @@ public class SqlUnitOfWork(string connectionString, AppDbContext context) : IUni
     public IOrderLineRepository OrderLineRepository => _orderLineRepository ??= new SqlOrderLineRepository(_context);
 
     public IChatMessageRepository ChatMessageRepository => _chatMessageRepository ??= new SqlChatMessageRepository(_context);
+    public IWorkoutRepository WorkoutPlanRepository => _workoutPlanRepository ??= new SqlWorkoutPlanRepository(_context);
 
     public async Task<int> SaveChangeAsync()
     {

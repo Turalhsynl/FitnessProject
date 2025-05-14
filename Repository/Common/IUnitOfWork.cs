@@ -22,5 +22,6 @@ public interface IUnitOfWork
     public IOrderRepository OrderRepository { get; }
     public IOrderLineRepository OrderLineRepository { get; }
     public IChatMessageRepository ChatMessageRepository { get; }
+    public IWorkoutRepository WorkoutPlanRepository { get; }
     Task<int> SaveChangeAsync();
 }
