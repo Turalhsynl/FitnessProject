@@ -22,7 +22,7 @@ public class WorkoutPlanController(ISender sender) : ControllerBase
 
         return Ok(new
         {
-            message = "Məşq proqramı uğurla generasiya olundu.",
+            message = "Workout plan created succesfully",
             content = result
         });
     }
