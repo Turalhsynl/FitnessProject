@@ -65,6 +65,8 @@ builder.Services.AddScoped<IRecipeService, RecipeImageService>();
 builder.Services.AddScoped<StripeService>();
 builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddSignalR();
+builder.Services.AddHttpClient<IGoogleAuthService, GoogleAuthService>();
+
 
 
 

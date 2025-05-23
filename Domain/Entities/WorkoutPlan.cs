@@ -10,7 +10,7 @@ public class WorkoutPlan : BaseEntity
     public string Gender { get; set; }
     public string Goal { get; set; }
     public string Level { get; set; }
-    public int DaysPerWeek { get; set; }
+    public string DaysPerWeek { get; set; }
     public string BodyType { get; set; }
     public string DreamBody { get; set; }
     public string TargetZone { get; set; }

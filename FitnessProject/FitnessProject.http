@@ -1,6 +1,0 @@
-@FitnessProject_HostAddress = http://localhost:5117
-
-GET {{FitnessProject_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

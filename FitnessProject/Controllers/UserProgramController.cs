@@ -61,22 +61,4 @@ public class UserProgramController : ControllerBase
         return Ok(result);
     }
 
-    //[HttpGet("exists")]
-    //public async Task<IActionResult> Exists([FromQuery] int userId, [FromQuery] int programId)
-    //{
-    //    var query = new CheckUserProgramExistsQuery(userId, programId);
-    //    var result = await _sender.Send(query);
-    //    return Ok(result);
-    //}
-
-    //[HttpGet("get")]
-    //public async Task<IActionResult> GetAsync([FromQuery] int userId, [FromQuery] int programId)
-    //{
-    //    var query = new GetUserProgramQuery(userId, programId);
-    //    var result = await _sender.Send(query);
-    //    if (!result.IsSuccess)
-    //        return NotFound(result.Errors);
-
-    //    return Ok(result.Data);
-    //}
 }
