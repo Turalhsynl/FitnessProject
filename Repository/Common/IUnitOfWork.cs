@@ -11,9 +11,7 @@ public interface IUnitOfWork
     public ICartRepository CartRepository { get; }
     public ICartLineRepository CartLineRepository { get; }
     public IFavoriteRepository FavoriteRepository { get; }
-
     public IRecipeRepository RecipeRepository { get; }
-
     public IFitnessProgramRepository FitnessProgramRepository { get; }
     public IFitnessProgramRecipeRepository FitnessProgramRecipeRepository { get; }
     public IUserProgramRepository UserProgramRepository { get; }
@@ -23,5 +21,7 @@ public interface IUnitOfWork
     public IOrderLineRepository OrderLineRepository { get; }
     public IChatMessageRepository ChatMessageRepository { get; }
     public IWorkoutRepository WorkoutPlanRepository { get; }
+    public IEmailVerificationRepository EmailVerificationRepository { get; }
+
     Task<int> SaveChangeAsync();
 }
