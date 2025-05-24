@@ -21,23 +21,24 @@ public class GenerateWorkoutHandler
         public async Task<string> Handle(GenerateWorkoutCommand request, CancellationToken cancellationToken)
         {
             var userInput = $"""
-            Məlumatlar:
-            - Fitness kateqoriyası: {request.RequestDto.FitnessCategory}
-            - Yaş: {request.RequestDto.Age}
-            - Cinsiyyət: {request.RequestDto.Gender}
-            - Məqsəd: {request.RequestDto.Goal}
-            - Səviyyə: {request.RequestDto.Level}
-            - Həftədə məşq sayı: {request.RequestDto.DaysPerWeek}
-            - Bədən tipi: {request.RequestDto.BodyType}
-            - Arzulanan bədən: {request.RequestDto.DreamBody}
-            - Fokus bölgə: {request.RequestDto.TargetZone}
-            - Yuxu saatı: {request.RequestDto.SleepTime}
-            - Boy: {request.RequestDto.Height} sm
-            - Çəki: {request.RequestDto.Weight} kq
+            Information:
+            - Fitness category: {request.RequestDto.FitnessCategory}
+            - Age: {request.RequestDto.Age}
+            - Gender: {request.RequestDto.Gender}
+            - Goal: {request.RequestDto.Goal}
+            - Level: {request.RequestDto.Level}
+            - Workout frequency (per week): {request.RequestDto.DaysPerWeek}
+            - Body type: {request.RequestDto.BodyType}
+            - Dream body: {request.RequestDto.DreamBody}
+            - Target zone: {request.RequestDto.TargetZone}
+            - Sleep duration: {request.RequestDto.SleepTime} hours
+            - Height: {request.RequestDto.Height} cm
+            - Weight: {request.RequestDto.Weight} kg
 
-            Zəhmət olmasa bu məlumatlara uyğun olaraq 1 aylıq fərdi fitness proqramı hazırla.
-            Sonda bədənim haqqında qısa bir analiz və məsləhət də əlavə et.
+            Please create a personalized 1-month fitness program based on this information.
+            At the end, include a short body analysis and give some advice.
             """;
+
 
             var aiResponse = await _aiService.GetResponseAsync(userInput);
 
