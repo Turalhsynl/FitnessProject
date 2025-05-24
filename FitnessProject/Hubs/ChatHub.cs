@@ -58,24 +58,53 @@ public class ChatHub : Hub
 
         const int AI_USER_ID = -1;
 
+        //if (receiverId == AI_USER_ID)
+        //{
+        //    string aiPrompt = message;
+
+        //    if (message.Trim().ToLower() == "salam" && !string.IsNullOrEmpty(userName))
+        //    {
+        //        aiPrompt = $"Istifadeci sene 'salam' dedi. Onun adı {userName}. Ona adıyla mehriban bir şekilde cavab ver.";
+        //    }
+
+        //    var aiResponse = await _openAIService.GetResponseAsync(aiPrompt);
+
+        //    var aiMessageDto = new
+        //    {
+        //        SenderId = AI_USER_ID,
+        //        Message = aiResponse,
+        //        SentAt = DateTime.UtcNow
+        //    };
+
+        //    await Clients.Caller.SendAsync("ReceiveMessage", aiMessageDto);
+        //}
         if (receiverId == AI_USER_ID)
         {
             string aiPrompt = message;
 
-            if (message.Trim().ToLower() == "merhaba" && !string.IsNullOrEmpty(userName))
+            if (message.Trim().ToLower() == "salam" && !string.IsNullOrEmpty(userName))
             {
-                aiPrompt = $"Kullanıcı sana 'Merhaba' dedi. Onun adı {userName}. Ona adıyla sıcak bir şekilde cevap ver.";
+                aiPrompt = $"Istifadeci sene 'salam' dedi. Onun adı {userName}. Ona adıyla mehriban bir şekilde cavab ver.";
             }
 
             var aiResponse = await _openAIService.GetResponseAsync(aiPrompt);
 
+            // Göndərilən mesajı istifadəçiyə göstər
+            var userMessageDto = new
+            {
+                SenderId = senderId,
+                Message = message,
+                SentAt = DateTime.UtcNow
+            };
+            await Clients.Caller.SendAsync("ReceiveMessage", userMessageDto);
+
+            // AI cavabını göstər
             var aiMessageDto = new
             {
-                SenderId = AI_USER_ID,
+                SenderId = -1,
                 Message = aiResponse,
                 SentAt = DateTime.UtcNow
             };
-
             await Clients.Caller.SendAsync("ReceiveMessage", aiMessageDto);
         }
         else
